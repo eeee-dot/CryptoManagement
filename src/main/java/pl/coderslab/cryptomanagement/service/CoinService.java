@@ -19,23 +19,23 @@ public class CoinService extends GenericService<Coin> {
         this.coinRepository = coinRepository;
     }
 
-    public ResponseEntity<Coin> update(Long id, Coin coin) {
-        Optional<Coin> coinToUpdate = coinRepository.findById(id);
-        if(coinToUpdate.isPresent()) {
-            String name = coin.getName();
-            if (name != null) {
-                coinToUpdate.get().setName(name);
-            }
-
-            String symbol = coin.getSymbol();
-            if (symbol != null) {
-
-            }
-            coin.getDescription();
-            coin.getMarketCap();
-            coin.getPrice();
-            coin.getCreatedAt();
-        }
-    }
+//    public ResponseEntity<Coin> update(Long id, Coin coin) {
+//        Optional<Coin> coinToUpdate = coinRepository.findById(id);
+//        if(coinToUpdate.isPresent()) {
+//            String name = coin.getName();
+//            if (name != null) {
+//                coinToUpdate.get().setName(name);
+//            }
+//
+//            String symbol = coin.getSymbol();
+//            if (symbol != null) {
+//
+//            }
+//            coin.getDescription();
+//            coin.getMarketCap();
+//            coin.getPrice();
+//            coin.getCreatedAt();
+//        }
+//    }
 
 }
