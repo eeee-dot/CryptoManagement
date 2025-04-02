@@ -1,0 +1,29 @@
+package pl.coderslab.cryptomanagement.generic;
+
+import lombok.AllArgsConstructor;
+import org.springframework.data.jpa.repository.JpaRepository;
+import jakarta.validation.Validator;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@AllArgsConstructor
+public abstract class GenericService<T> {
+    protected final JpaRepository<T, Long> repository;
+    protected final Validator validator;
+
+    public ResponseEntity<List<T>> getAll() {
+        return ResponseEntity.ok(repository.findAll());
+    }
+
+    public ResponseEntity<T> getById(Long id) {
+        Optional<T> result = repository.findById(id);
+        if (result.isPresent()) {
+             return ResponseEntity.ok(result.get());
+        } else {
+            throw new RuntimeException();
+        }
+    }
+}
