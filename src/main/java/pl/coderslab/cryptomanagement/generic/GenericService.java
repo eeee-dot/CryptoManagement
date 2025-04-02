@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import jakarta.validation.Validator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,15 +21,19 @@ public abstract class GenericService<T> {
     public ResponseEntity<T> getById(Long id) {
         Optional<T> result = repository.findById(id);
         if (result.isPresent()) {
-             return ResponseEntity.ok(result.get());
+            return ResponseEntity.ok(result.get());
         } else {
             throw new RuntimeException();
         }
     }
 
     public ResponseEntity<T> add(T entity) {
-        repository.save(entity);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        var violations = validator.validate(entity);
+        if (violations.isEmpty()) {
+            repository.save(entity);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     public ResponseEntity<T> delete(Long id) {
