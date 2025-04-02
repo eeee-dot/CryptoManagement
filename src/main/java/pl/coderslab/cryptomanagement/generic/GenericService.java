@@ -3,6 +3,7 @@ package pl.coderslab.cryptomanagement.generic;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import jakarta.validation.Validator;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -25,5 +26,10 @@ public abstract class GenericService<T> {
         } else {
             throw new RuntimeException();
         }
+    }
+
+    public ResponseEntity<T> add(T entity) {
+        repository.save(entity);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
