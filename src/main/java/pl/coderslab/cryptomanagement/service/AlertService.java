@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import pl.coderslab.cryptomanagement.entity.Alert;
 import pl.coderslab.cryptomanagement.entity.Coin;
 import pl.coderslab.cryptomanagement.entity.User;
+import pl.coderslab.cryptomanagement.exception.ResourceNotFoundException;
 import pl.coderslab.cryptomanagement.generic.GenericService;
 import pl.coderslab.cryptomanagement.repository.AlertRepository;
 
@@ -50,6 +51,6 @@ public class AlertService extends GenericService<Alert> {
             return ResponseEntity.ok(alertRepository.save(alertToUpdate.get()));
         }
 
-        throw new RuntimeException();
+        throw new ResourceNotFoundException(id);
     }
 }
