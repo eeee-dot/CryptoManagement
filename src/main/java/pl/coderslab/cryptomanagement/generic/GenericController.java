@@ -2,11 +2,9 @@ package pl.coderslab.cryptomanagement.generic;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -42,5 +40,13 @@ public class GenericController<T>{
         return service.add(object);
     }
 
+    @Operation(
+            summary = "Delete instance by ID",
+            description = "Deletes instance with given ID"
+    )
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<T> delete(@PathVariable Long id) {
+        return service.delete(id);
+    }
 
 }
