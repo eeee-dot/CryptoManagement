@@ -32,4 +32,14 @@ public abstract class GenericService<T> {
         repository.save(entity);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+    public ResponseEntity<T> delete(Long id) {
+        Optional<T> result = repository.findById(id);
+        if (result.isPresent()) {
+            repository.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            throw new RuntimeException();
+        }
+    }
 }
