@@ -12,7 +12,6 @@ import java.util.List;
 public class GenericController<T>{
     protected final GenericService<T> service;
     protected final Class<T> type;
-    private final String name = type.getSimpleName();
 
     @Operation(
             summary = "Get all instances",
