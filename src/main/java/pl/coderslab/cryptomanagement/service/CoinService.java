@@ -1,21 +1,15 @@
 package pl.coderslab.cryptomanagement.service;
 
 import jakarta.validation.Validator;
-import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import pl.coderslab.cryptomanagement.dto.AlertDTO;
 import pl.coderslab.cryptomanagement.dto.CoinDTO;
-import pl.coderslab.cryptomanagement.entity.Alert;
 import pl.coderslab.cryptomanagement.entity.Coin;
 import pl.coderslab.cryptomanagement.entity.Price;
-import pl.coderslab.cryptomanagement.entity.User;
 import pl.coderslab.cryptomanagement.exception.ResourceNotFoundException;
 import pl.coderslab.cryptomanagement.generic.GenericService;
 import pl.coderslab.cryptomanagement.repository.CoinRepository;
 import pl.coderslab.cryptomanagement.repository.PriceRepository;
-
-import java.util.Optional;
 
 @Service
 public class CoinService extends GenericService<Coin> {
@@ -47,7 +41,10 @@ public class CoinService extends GenericService<Coin> {
                         coinToUpdate.setMarketCap(coinDTO.getMarketCap());
                     }
                     if (coinDTO.getPriceId() != null) {
-                        Price price = priceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+                        Price price = priceRepository
+                                .findById(coinDTO.getPriceId())
+                                .orElseThrow(() -> new ResourceNotFoundException(coinDTO.getPriceId()));
+
                         coinToUpdate.setPrice(price);
                     }
                     return ResponseEntity.ok(coinRepository.save(coinToUpdate));

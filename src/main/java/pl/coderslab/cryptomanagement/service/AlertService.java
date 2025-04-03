@@ -29,21 +29,24 @@ public class AlertService extends GenericService<Alert> {
     public ResponseEntity<Alert> update(Long id, AlertDTO alertDTO) {
         return alertRepository.findById(id)
                 .map(alertToUpdate -> {
-                    if(alertDTO.getPriceTarget() != null) {
+                    if (alertDTO.getPriceTarget() != null) {
                         alertToUpdate.setPriceTarget(alertDTO.getPriceTarget());
                     }
-//                    if(alertDTO.getCreatedAt() != null) {
-//                        alertToUpdate.setCreatedAt(alertDTO.getCreatedAt());
-//                    }
-                    if(alertDTO.getStatus() != null) {
+                    if (alertDTO.getStatus() != null) {
                         alertToUpdate.setStatus(alertDTO.getStatus());
                     }
-                    if(alertDTO.getCoinId() != null) {
-                        Coin coin = coinRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+                    if (alertDTO.getCoinId() != null) {
+                        Coin coin = coinRepository
+                                .findById(alertDTO.getCoinId())
+                                .orElseThrow(() -> new ResourceNotFoundException(alertDTO.getCoinId()));
+
                         alertToUpdate.setCoin(coin);
                     }
                     if (alertDTO.getUserId() != null) {
-                        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+                        User user = userRepository
+                                .findById(alertDTO.getUserId())
+                                .orElseThrow(() -> new ResourceNotFoundException(alertDTO.getUserId()));
+
                         alertToUpdate.setUser(user);
                     }
                     return ResponseEntity.ok(alertRepository.save(alertToUpdate));

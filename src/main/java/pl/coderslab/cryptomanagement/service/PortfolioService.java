@@ -36,12 +36,15 @@ public class PortfolioService extends GenericService<Portfolio> {
                         portfolioToUpdate.setUpdatedAt(portfolioDTO.getUpdatedAt());
                     }
                     if (portfolioDTO.getUserId() != null) {
-                        User user = userRepository.findById(id).orElseThrow(()->new ResourceNotFoundException(id));
+                        User user = userRepository
+                                .findById(portfolioDTO.getUserId())
+                                .orElseThrow(() -> new ResourceNotFoundException(portfolioDTO.getUserId()));
+
                         portfolioToUpdate.setUser(user);
                     }
                     return ResponseEntity.ok(portfolioRepository.save(portfolioToUpdate));
                 })
                 .orElseThrow(() -> new ResourceNotFoundException(id));
     }
-    
+
 }
