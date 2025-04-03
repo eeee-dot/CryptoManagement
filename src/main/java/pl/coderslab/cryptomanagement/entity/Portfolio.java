@@ -22,6 +22,7 @@ public class Portfolio {
     private LocalDate createdAt;
     private LocalDateTime updatedAt;
 
-    @ManyToOne
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 }

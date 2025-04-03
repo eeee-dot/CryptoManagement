@@ -29,7 +29,7 @@ public class Alert {
     @JoinColumn(name = "coin_id", nullable = false)
     private Coin coin;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 }
