@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import pl.coderslab.cryptomanagement.dto.PriceDTO;
 import pl.coderslab.cryptomanagement.entity.Coin;
 import pl.coderslab.cryptomanagement.entity.Price;
-import pl.coderslab.cryptomanagement.entity.User;
 import pl.coderslab.cryptomanagement.exception.ResourceNotFoundException;
 import pl.coderslab.cryptomanagement.generic.GenericService;
 import pl.coderslab.cryptomanagement.repository.CoinRepository;
@@ -24,7 +23,7 @@ public class PriceService extends GenericService<Price> {
         this.priceRepository = priceRepository;
         this.coinRepository = coinRepository;
     }
-    
+
     public ResponseEntity<Price> update(Long id, PriceDTO priceDTO) {
         return priceRepository.findById(id)
                 .map(priceToUpdate -> {
@@ -32,7 +31,10 @@ public class PriceService extends GenericService<Price> {
                         priceToUpdate.setPrice(priceDTO.getPrice());
                     }
                     if (priceDTO.getCoinId() != null) {
-                        Coin coin = coinRepository.findById(priceDTO.getCoinId()).orElseThrow(() -> new ResourceNotFoundException(priceDTO.getCoinId()));
+                        Coin coin = coinRepository
+                                .findById(priceDTO.getCoinId())
+                                .orElseThrow(() -> new ResourceNotFoundException(priceDTO.getCoinId()));
+
                         priceToUpdate.setCoin(coin);
                     }
                     LocalDateTime current = LocalDateTime.now();

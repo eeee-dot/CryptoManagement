@@ -47,7 +47,10 @@ public class CoinService extends GenericService<Coin> {
                         coinToUpdate.setMarketCap(coinDTO.getMarketCap());
                     }
                     if (coinDTO.getPriceId() != null) {
-                        Price price = priceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+                        Price price = priceRepository
+                                .findById(coinDTO.getPriceId())
+                                .orElseThrow(() -> new ResourceNotFoundException(coinDTO.getPriceId()));
+
                         coinToUpdate.setPrice(price);
                     }
                     return ResponseEntity.ok(coinRepository.save(coinToUpdate));
