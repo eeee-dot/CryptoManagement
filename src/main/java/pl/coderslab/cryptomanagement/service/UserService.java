@@ -4,7 +4,6 @@ import jakarta.validation.Validator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.coderslab.cryptomanagement.dto.UserDTO;
-import pl.coderslab.cryptomanagement.entity.Coin;
 import pl.coderslab.cryptomanagement.entity.User;
 import pl.coderslab.cryptomanagement.exception.ResourceNotFoundException;
 import pl.coderslab.cryptomanagement.generic.GenericService;
