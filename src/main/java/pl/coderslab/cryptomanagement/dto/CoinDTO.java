@@ -3,7 +3,6 @@ package pl.coderslab.cryptomanagement.dto;
 
 import jakarta.validation.constraints.DecimalMin;
 import lombok.Data;
-import pl.coderslab.cryptomanagement.entity.Price;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
