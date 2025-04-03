@@ -14,7 +14,7 @@ public class CoinDTO {
     private String symbol;
     private String description;
     private LocalDateTime createdAt;
-    private Price price;
+    private Long priceId;
 
     @DecimalMin(value = "0.0", inclusive = false)
     private BigDecimal marketCap;
