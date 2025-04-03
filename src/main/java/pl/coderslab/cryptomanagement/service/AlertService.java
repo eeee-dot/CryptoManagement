@@ -32,9 +32,9 @@ public class AlertService extends GenericService<Alert> {
                     if(alertDTO.getPriceTarget() != null) {
                         alertToUpdate.setPriceTarget(alertDTO.getPriceTarget());
                     }
-                    if(alertDTO.getCreatedAt() != null) {
-                        alertToUpdate.setCreatedAt(alertDTO.getCreatedAt());
-                    }
+//                    if(alertDTO.getCreatedAt() != null) {
+//                        alertToUpdate.setCreatedAt(alertDTO.getCreatedAt());
+//                    }
                     if(alertDTO.getStatus() != null) {
                         alertToUpdate.setStatus(alertDTO.getStatus());
                     }
