@@ -10617,6 +10617,9 @@ a:focus {
   .sidebar.toggled .sidebar-brand .sidebar-brand-icon i {
     font-size: 2rem;
   }
+  .sidebar-brand-icon.toggled {
+    display: none;
+  }
   .sidebar.toggled .sidebar-brand .sidebar-brand-text {
     display: none;
   }
