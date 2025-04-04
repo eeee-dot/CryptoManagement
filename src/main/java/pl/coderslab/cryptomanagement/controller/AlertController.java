@@ -2,6 +2,8 @@ package pl.coderslab.cryptomanagement.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.coderslab.cryptomanagement.dto.AlertDTO;
@@ -19,10 +21,9 @@ public class AlertController extends GenericController<Alert> {
         this.alertService = alertService;
     }
 
-    @PatchMapping("/alert")
-    public ResponseEntity<Alert> updateAlert() {
-        alertService.update(1L, new AlertDTO());
-        return ResponseEntity.ok().build();
+    @GetMapping("/")
+    public String updateAlert() {
+        return "alerts";
     }
 
 
