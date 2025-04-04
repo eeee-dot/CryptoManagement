@@ -17,7 +17,7 @@ public class AlertController extends GenericController<Alert> {
         this.alertService = alertService;
     }
 
-    @PatchMapping("alert")
+    @PatchMapping("/alert")
     public ResponseEntity<Alert> updateAlert() {
         alertService.update(1L, new AlertDTO());
         return ResponseEntity.ok().build();
