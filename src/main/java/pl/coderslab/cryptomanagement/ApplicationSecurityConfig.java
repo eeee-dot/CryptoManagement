@@ -23,7 +23,7 @@ public class ApplicationSecurityConfig {
 
         http.authorizeHttpRequests(
                         authorize -> authorize
-                                .requestMatchers("/public/**", "/resources/**", "/fonts/**", "/img/**")
+                                .requestMatchers("/fonts/**", "/img/**", "/js/**", "/css/**", "/scss/**", "/vendor/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()
