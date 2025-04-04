@@ -44,14 +44,9 @@ public class UserService extends GenericService<User> implements UserDetailsServ
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        if(user.isPresent()) {
-
-        } else {
-            throw new UsernameNotFoundException("User not found");
-        }
-
-        return new UserPrincipal(user.get());
+        return new UserPrincipal(user);
     }
 }
