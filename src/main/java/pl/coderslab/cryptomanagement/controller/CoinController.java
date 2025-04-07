@@ -20,7 +20,7 @@ public class CoinController extends GenericController<Coin> {
         this.coinService = coinService;
     }
 
-    @GetMapping("/coin")
+    @GetMapping()
     public String getCoins(Model model) {
         List<Coin> coins = coinService.getAll().getBody();
         model.addAttribute("coins", coins);
