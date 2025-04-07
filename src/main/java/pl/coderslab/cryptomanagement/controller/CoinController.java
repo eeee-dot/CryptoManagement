@@ -1,10 +1,9 @@
 package pl.coderslab.cryptomanagement.controller;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import pl.coderslab.cryptomanagement.dto.CoinDTO;
 import pl.coderslab.cryptomanagement.entity.Coin;
 import pl.coderslab.cryptomanagement.generic.GenericController;
 import pl.coderslab.cryptomanagement.service.CoinService;
@@ -19,10 +18,9 @@ public class CoinController extends GenericController<Coin> {
         this.coinService = coinService;
     }
 
-    @PatchMapping("/coin")
-    public ResponseEntity<Coin> updateCoin() {
-        coinService.update(1L, new CoinDTO());
-        return ResponseEntity.ok().build();
+    @GetMapping("/coin")
+    public String getCoins() {
+        return "coins";
     }
 
 
