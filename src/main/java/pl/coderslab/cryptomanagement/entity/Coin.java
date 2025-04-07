@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
@@ -36,5 +37,6 @@ public class Coin {
     private BigDecimal marketCap;
 
     @OneToOne(mappedBy = "coin", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private Price price;
 }
