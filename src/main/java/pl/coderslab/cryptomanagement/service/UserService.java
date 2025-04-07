@@ -13,8 +13,6 @@ import pl.coderslab.cryptomanagement.generic.GenericService;
 import pl.coderslab.cryptomanagement.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Optional;
-
 @Service
 public class UserService extends GenericService<User> implements UserDetailsService {
     private final UserRepository userRepository;
