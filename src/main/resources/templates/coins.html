@@ -60,18 +60,16 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Symbol</th>
+                                            <th>Market Cap [$]</th>
                                             <th>Price [$]</th>
-                                            <th>Age</th>
-                                            <th>Wallet address</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>System Architect</td>
-                                            <td>Edinburgh</td>
-                                            <td>61</td>
-                                            <td>2011/04/25</td>
+                                        <tr th:each="coin : ${coins}">
+                                            <td th:text="${coin.getName()}"></td>
+                                            <td th:text="${coin.getSymbol()}"></td>
+                                            <td th:text="${coin.getMarketCap()}"></td>
+                                            <td th:text="${coin.getPrice()}"></td>
                                         </tr>
                                     </tbody>
                                 </table>
