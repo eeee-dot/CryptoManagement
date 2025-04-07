@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import pl.coderslab.cryptomanagement.entity.Wallet;
 import pl.coderslab.cryptomanagement.generic.GenericController;
 import pl.coderslab.cryptomanagement.service.WalletService;
@@ -33,5 +34,13 @@ public class WalletController extends GenericController<Wallet> {
         return "addWalletForm";
     }
 
-
+    @PostMapping("/add")
+    public String addWallet(
+            @RequestParam("name") String name,
+            @RequestParam("address") String address,
+            @RequestParam("balance") double balance,
+            Model model) {
+        model.addAttribute("message", "Wallet added successfully");
+        return "wallets";
+    }
 }

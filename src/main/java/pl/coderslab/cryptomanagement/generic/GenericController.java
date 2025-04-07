@@ -34,7 +34,7 @@ public class GenericController<T>{
             summary = "Add new instance",
             description = "Adding new instance to entity"
     )
-    @PostMapping("/add")
+    @PostMapping("/generic/add")
     public ResponseEntity<T> add(@RequestBody T object) {
         return service.add(object);
     }
