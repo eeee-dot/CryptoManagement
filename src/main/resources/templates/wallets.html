@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Coins</title>
+    <title>Wallets</title>
 
     <!-- Custom fonts for this template -->
     <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -43,16 +43,16 @@
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <h1 class="h3 mb-2 text-gray-800">Coins</h1>
+                <h1 class="h3 mb-2 text-gray-800">Wallets</h1>
 
 
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="m-0 font-weight-bold text-primary">Available coins</h6>
-                            <button type="submit" class="btn btn-primary btn-sm">
-                                Add new coin
-                            </button>
+                            <h6 class="m-0 font-weight-bold text-primary">User wallets</h6>
+                            <a class="btn btn-primary btn-sm" href="/wallet/add">
+                                Add new wallet
+                            </a>
 
                         </div>
                     </div>
@@ -62,20 +62,20 @@
                                 <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Symbol</th>
-                                    <th>Market Cap [$]</th>
-                                    <th>Price [$]</th>
-                                    <th>Actions</th>
+                                    <th>Balance [$]</th>
+                                    <th>Address</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="coin : ${coins}">
-                                    <td th:text="${coin.getName()}"></td>
-                                    <td th:text="${coin.getSymbol()}"></td>
-                                    <td th:text="${coin.getMarketCap()}"></td>
-                                    <td th:text="${coin.getPrice()}"></td>
+                                <tr th:each="wallet : ${wallets}">
+                                    <td th:text="${wallet.getName()}"></td>
+                                    <td th:text="${wallet.getBalance()}"></td>
+                                    <td th:text="${wallet.getAddress()}"></td>
                                     <td>
-                                        <a href="/home">Delete</a>
+                                        <ul>
+                                            <li><a href="/">Edit</a></li>
+                                            <li><a href="/home">Delete</a></li>
+                                        </ul>
                                     </td>
                                 </tr>
                                 </tbody>

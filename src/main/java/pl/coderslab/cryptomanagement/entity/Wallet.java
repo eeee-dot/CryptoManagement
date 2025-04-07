@@ -28,6 +28,9 @@ public class Wallet {
     @DecimalMin(value = "0.0", inclusive = false)
     private BigDecimal balance;
 
+    @NotEmpty
+    private String address;
+
     @ManyToOne
     private User user;
 }
