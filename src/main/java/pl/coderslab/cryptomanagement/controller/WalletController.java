@@ -2,6 +2,7 @@ package pl.coderslab.cryptomanagement.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.coderslab.cryptomanagement.entity.Wallet;
 import pl.coderslab.cryptomanagement.generic.GenericController;
@@ -25,6 +26,11 @@ public class WalletController extends GenericController<Wallet> {
         List<Wallet> wallets = walletService.getAll().getBody();
         model.addAttribute("wallets", wallets);
         return "wallets";
+    }
+
+    @GetMapping("/add")
+    public String addWallet() {
+        return "addWalletForm";
     }
 
 
