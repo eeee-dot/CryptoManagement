@@ -66,9 +66,9 @@ public class WalletController extends GenericController<Wallet> {
             wallet.setUser(user.get());
             walletService.add(wallet);
             model.addAttribute("message", "Wallet added successfully");
+            return "wallets";
         } else {
             return "404";
         }
-        return "wallets";
     }
 }
