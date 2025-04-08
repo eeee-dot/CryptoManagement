@@ -35,9 +35,12 @@ public class WalletController extends GenericController<Wallet> {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         Optional<User> user = userRepository.findByUsername(currentPrincipalName);
+
         if (user.isPresent()) {
             List<Wallet> wallets = walletService.loadWalletsByUser(user.get()).getBody();
             model.addAttribute("wallets", wallets);
+        } else {
+            return "404";
         }
         return "wallets";
     }
@@ -63,6 +66,8 @@ public class WalletController extends GenericController<Wallet> {
             wallet.setUser(user.get());
             walletService.add(wallet);
             model.addAttribute("message", "Wallet added successfully");
+        } else {
+            return "404";
         }
         return "wallets";
     }
