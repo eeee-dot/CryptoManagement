@@ -21,7 +21,7 @@ public class AlertController extends GenericController<Alert> {
         this.alertService = alertService;
     }
 
-    @GetMapping("/")
+    @GetMapping()
     public String updateAlert() {
         return "alerts";
     }
