@@ -30,16 +30,15 @@ public class WalletController extends GenericController<Wallet> {
 
     @GetMapping()
     public String updateWallet(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
+        String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<User> user = userRepository.findByUsername(currentPrincipalName);
 
-        if (user.isPresent()) {
-            List<Wallet> wallets = walletService.loadWalletsByUser(user.get()).getBody();
-            model.addAttribute("wallets", wallets);
-        } else {
+        if (user.isEmpty()) {
             return "404";
         }
+
+        List<Wallet> wallets = walletService.loadWalletsByUser(user.get()).getBody();
+        model.addAttribute("wallets", wallets);
         return "wallets";
     }
 
@@ -55,23 +54,24 @@ public class WalletController extends GenericController<Wallet> {
             @RequestParam("balance") BigDecimal balance,
             @RequestParam("username") String username,
             Model model) {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isEmpty()) {
+            return "404";
+        }
+
         Wallet wallet = new Wallet();
         wallet.setName(name);
         wallet.setAddress(address);
         wallet.setBalance(balance);
-        Optional<User> user = userRepository.findByUsername(username);
-        if (user.isPresent()) {
-            wallet.setUser(user.get());
-            walletService.add(wallet);
-            model.addAttribute("message", "Wallet added successfully");
-            return "wallets";
-        } else {
-            return "404";
-        }
+        wallet.setUser(user.get());
+
+        walletService.add(wallet);
+        model.addAttribute("message", "Wallet added successfully");
+        return "wallets";
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteWallet(@PathVariable Long id) {
+    public String deleteWallet(@PathVariable Long id ){
         walletService.delete(id);
         return "wallets";
     }
