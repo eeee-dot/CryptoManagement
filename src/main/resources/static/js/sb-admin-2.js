@@ -1,6 +1,25 @@
 (function($) {
   "use strict"; // Start of use strict
 
+function deleteWallet(element) {
+    let id = element.getAttribute("data-id");
+    let xhr = new XMLHttpRequest();
+    xhr.open("DELETE", "/wallet/delete/" + id, true);
+    xhr.onreadystatechange = function() {
+      if(xhr.readyState === 4 && xhr.status === 200) {
+        alert("Wallet was successfully deleted");
+        window.location.href = "/wallet";
+      }else if (xhr.readyState === 4) {
+        alert("Error deleting wallet: " + xhr.responseText);
+      }
+    };
+    xhr.send(null);
+  }
+document.getElementById("deleteButton").addEventListener("click", function(event) {
+  event.preventDefault();
+  deleteWallet(this);
+});
+
   // Toggle the side navigation
   $("#sidebarToggle, #sidebarToggleTop").on('click', function(e) {
     $("body").toggleClass("sidebar-toggled");

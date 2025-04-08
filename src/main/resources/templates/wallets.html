@@ -42,14 +42,10 @@
             <!-- Begin Page Content -->
             <div class="container-fluid">
 
-                <!-- Page Heading -->
-                <h1 class="h3 mb-2 text-gray-800">Wallets</h1>
-
-
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="m-0 font-weight-bold text-primary">User wallets</h6>
+                            <h4 class="m-0 font-weight-bold">User wallets</h4>
                             <a class="btn btn-primary btn-sm" href="/wallet/add">
                                 Add new wallet
                             </a>
@@ -64,6 +60,7 @@
                                     <th>Name</th>
                                     <th>Balance [$]</th>
                                     <th>Address</th>
+                                    <th>Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -74,7 +71,7 @@
                                     <td>
                                         <ul>
                                             <li><a href="/">Edit</a></li>
-                                            <li><a href="#" th:attr="data-id=${wallet.getWalletId()}" onclick="deleteWallet(this)">Delete</a></li>
+                                            <li><a id="deleteButton" href="#" th:attr="data-id=${wallet.getWalletId()}">Delete</a></li>
                                         </ul>
                                     </td>
                                 </tr>
@@ -124,22 +121,6 @@
     </div>
 </div>
 
-<script>
-    function deleteWallet(element) {
-        let id = element.getAttribute("data-id");
-        let xhr = new XMLHttpRequest();
-        xhr.open("DELETE", "/wallet/delete/" + id, true);
-        xhr.onreadystatechange = function() {
-            if(xhr.readyState === 4 && xhr.status === 200) {
-                alert("Wallet was successfully deleted");
-                window.location.href = "/wallet";
-            }else if (xhr.readyState === 4) {
-                alert("Error deleting wallet: " + xhr.responseText);
-            }
-        };
-        xhr.send(null);
-    }
-</script>
 <!-- Bootstrap core JavaScript-->
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
