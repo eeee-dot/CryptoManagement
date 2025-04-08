@@ -17,12 +17,12 @@ import java.util.Optional;
 @RequestMapping("/alert")
 public class AlertController extends GenericController<Alert> {
     private final AlertService alertService;
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    public AlertController(AlertService alertService) {
+    public AlertController(AlertService alertService, UserRepository userRepository) {
         super(alertService, Alert.class);
         this.alertService = alertService;
-
+        this.userRepository = userRepository;
     }
 
     @GetMapping()
@@ -37,7 +37,6 @@ public class AlertController extends GenericController<Alert> {
         List<Alert> alerts = alertService.loadAlertsByUser(user.get()).getBody();
         model.addAttribute("alerts", alerts);
         return "alerts";
-
     }
 
 
