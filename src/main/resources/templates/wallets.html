@@ -74,7 +74,7 @@
                                     <td>
                                         <ul>
                                             <li><a href="/">Edit</a></li>
-                                            <li><a href="/home">Delete</a></li>
+                                            <li><a href="#" th:attr="data-id=${wallet.getWalletId()}" onclick="deleteWallet(this)">Delete</a></li>
                                         </ul>
                                     </td>
                                 </tr>
@@ -124,6 +124,22 @@
     </div>
 </div>
 
+<script>
+    function deleteWallet(element) {
+        let id = element.getAttribute("data-id");
+        let xhr = new XMLHttpRequest();
+        xhr.open("DELETE", "/wallet/delete/" + id, true);
+        xhr.onreadystatechange = function() {
+            if(xhr.readyState === 4 && xhr.status === 200) {
+                alert("Wallet was successfully deleted");
+                window.location.href = "/wallet";
+            }else if (xhr.readyState === 4) {
+                alert("Error deleting wallet: " + xhr.responseText);
+            }
+        };
+        xhr.send(null);
+    }
+</script>
 <!-- Bootstrap core JavaScript-->
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

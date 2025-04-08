@@ -43,7 +43,7 @@ public class GenericController<T>{
             summary = "Delete instance by ID",
             description = "Deletes instance with given ID"
     )
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/generic/delete/{id}")
     public ResponseEntity<T> delete(@PathVariable Long id) {
         return service.delete(id);
     }
