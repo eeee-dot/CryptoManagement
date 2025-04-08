@@ -62,18 +62,21 @@
                                 <tr>
                                     <th>Coin symbol</th>
                                     <th>Target price [$]</th>
-                                    <th>Current price [$]</th>
+                                    <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr th:each="alert : ${alerts}">
-                                    <td th:text="${alert}"></td>
-                                    <td th:text="${coin.getSymbol()}"></td>
-                                    <td th:text="${coin.getMarketCap()}"></td>
-                                    <td th:text="${coin.getPrice()}"></td>
+                                    <td th:text="${alert.getCoinId()}"></td>
+                                    <td th:text="${alert.getPriceTarget()}"></td>
+                                    <td th:text="${alert.getStatus()}"></td>
                                     <td>
-                                        <a href="/home">Delete</a>
+                                        <ul>
+                                            <li>
+                                                <a id="deleteButton" href="#" th:attr="data-id=${alert.getAlertId()}">Delete</a>
+                                            </li>
+                                        </ul>
                                     </td>
                                 </tr>
                                 </tbody>
