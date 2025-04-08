@@ -1,6 +1,5 @@
 package pl.coderslab.cryptomanagement.controller;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -10,9 +9,7 @@ import pl.coderslab.cryptomanagement.generic.GenericController;
 import pl.coderslab.cryptomanagement.repository.UserRepository;
 import pl.coderslab.cryptomanagement.service.WalletService;
 import org.springframework.ui.Model;
-
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,11 +30,11 @@ public class WalletController extends GenericController<Wallet> {
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<User> user = userRepository.findByUsername(currentPrincipalName);
 
-        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             return "404";
         }
 
-        List<Wallet> wallets = walletService.loadWalletsByUser(user.get()).orElse(Collections.emptyList());
+        List<Wallet> wallets = walletService.loadWalletsByUser(user.get()).getBody();
         model.addAttribute("wallets", wallets);
         return "wallets";
     }
