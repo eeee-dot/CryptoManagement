@@ -1,5 +1,7 @@
 package pl.coderslab.cryptomanagement.controller;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,8 +32,13 @@ public class WalletController extends GenericController<Wallet> {
 
     @GetMapping()
     public String updateWallet(Model model) {
-        List<Wallet> wallets = walletService.getAll().getBody();
-        model.addAttribute("wallets", wallets);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        Optional<User> user = userRepository.findByUsername(currentPrincipalName);
+        if (user.isPresent()) {
+            List<Wallet> wallets = walletService.loadWalletsByUser(user.get()).getBody();
+            model.addAttribute("wallets", wallets);
+        }
         return "wallets";
     }
 

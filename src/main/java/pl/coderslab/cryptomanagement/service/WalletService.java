@@ -11,6 +11,9 @@ import pl.coderslab.cryptomanagement.generic.GenericService;
 import pl.coderslab.cryptomanagement.repository.UserRepository;
 import pl.coderslab.cryptomanagement.repository.WalletRepository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class WalletService extends GenericService<Wallet> {
     private final WalletRepository walletRepository;
@@ -42,5 +45,13 @@ public class WalletService extends GenericService<Wallet> {
                     return ResponseEntity.ok(walletRepository.save(walletToUpdate));
                 })
                 .orElseThrow(() -> new ResourceNotFoundException(id));
+    }
+
+    public ResponseEntity<List<Wallet>> loadWalletsByUser(User user) {
+        Optional<List<Wallet>> wallet = walletRepository.findByUser(user);
+        if (wallet.isPresent()) {
+            return ResponseEntity.ok(wallet.get());
+        }
+        throw new ResourceNotFoundException("Not user found");
     }
 }
