@@ -7,11 +7,15 @@ import pl.coderslab.cryptomanagement.dto.AlertDTO;
 import pl.coderslab.cryptomanagement.entity.Alert;
 import pl.coderslab.cryptomanagement.entity.Coin;
 import pl.coderslab.cryptomanagement.entity.User;
+import pl.coderslab.cryptomanagement.entity.Wallet;
 import pl.coderslab.cryptomanagement.exception.ResourceNotFoundException;
 import pl.coderslab.cryptomanagement.generic.GenericService;
 import pl.coderslab.cryptomanagement.repository.AlertRepository;
 import pl.coderslab.cryptomanagement.repository.CoinRepository;
 import pl.coderslab.cryptomanagement.repository.UserRepository;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AlertService extends GenericService<Alert> {
@@ -52,5 +56,13 @@ public class AlertService extends GenericService<Alert> {
                     return ResponseEntity.ok(alertRepository.save(alertToUpdate));
                 })
                 .orElseThrow(() -> new ResourceNotFoundException(id));
+    }
+
+    public ResponseEntity<List<Alert>> loadAlertsByUser(User user) {
+        Optional<List<Alert>> wallet = alertRepository.findByUser(user);
+        if (wallet.isPresent()) {
+            return ResponseEntity.ok(wallet.get());
+        }
+        throw new ResourceNotFoundException("Not user found");
     }
 }
