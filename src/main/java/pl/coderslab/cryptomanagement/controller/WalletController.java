@@ -44,7 +44,7 @@ public class WalletController extends GenericController<Wallet> {
 
     @GetMapping("/add")
     public String addWallet() {
-        return "addWalletForm";
+        return "add-wallet-form";
     }
 
     @PostMapping("/add")
