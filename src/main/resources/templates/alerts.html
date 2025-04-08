@@ -29,7 +29,7 @@
 
 <!-- Page Wrapper -->
 <div id="wrapper">
-    <div th:insert="sidebar :: sidebar"></div>
+    <div th:insert="~{sidebar :: sidebar}"></div>
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
@@ -37,7 +37,7 @@
         <!-- Main Content -->
         <div id="content">
 
-            <div th:insert="topbar :: topbar"></div>
+            <div th:insert="~{topbar :: topbar}"></div>
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
@@ -92,7 +92,7 @@
         <!-- End of Main Content -->
 
         <!-- Footer -->
-        <div th:insert="footer :: footer"></div>
+        <div th:insert="~{footer :: footer}"></div>
 
     </div>
     <!-- End of Content Wrapper -->
