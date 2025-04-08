@@ -6,10 +6,15 @@ import org.springframework.stereotype.Service;
 import pl.coderslab.cryptomanagement.dto.CoinDTO;
 import pl.coderslab.cryptomanagement.entity.Coin;
 import pl.coderslab.cryptomanagement.entity.Price;
+import pl.coderslab.cryptomanagement.entity.User;
+import pl.coderslab.cryptomanagement.entity.Wallet;
 import pl.coderslab.cryptomanagement.exception.ResourceNotFoundException;
 import pl.coderslab.cryptomanagement.generic.GenericService;
 import pl.coderslab.cryptomanagement.repository.CoinRepository;
 import pl.coderslab.cryptomanagement.repository.PriceRepository;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CoinService extends GenericService<Coin> {
@@ -50,5 +55,13 @@ public class CoinService extends GenericService<Coin> {
                     return ResponseEntity.ok(coinRepository.save(coinToUpdate));
                 })
                 .orElseThrow(() -> new ResourceNotFoundException(id));
+    }
+
+    public ResponseEntity<Coin> loadByName(String name) {
+        Optional<Coin> coin = coinRepository.findByName(name);
+        if (coin.isPresent()) {
+            return ResponseEntity.ok(coin.get());
+        }
+        throw new ResourceNotFoundException("Not coin found");
     }
 }

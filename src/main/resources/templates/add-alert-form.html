@@ -53,11 +53,14 @@
                             </div>
                             <div class="form-group">
                                 <label for="target-price">Target price</label>
-                                <input type="text" class="form-control" id="target-price" name="target-price" required>
+                                <input type="number" class="form-control" id="target-price" name="target-price" required>
                             </div>
                             <div class="form-group">
                                 <label for="status">Status</label>
-                                <input type="number" class="form-control" id="status" name="status" required>
+                                <select class="dropdown" name="status" id="status" required>
+                                    <option value="true">On</option>
+                                    <option value="false">Off</option>
+                                </select>
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>

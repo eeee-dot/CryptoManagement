@@ -15,10 +15,31 @@ function deleteWallet(element) {
     };
     xhr.send(null);
   }
+
+  function deleteAlert(element) {
+    let id = element.getAttribute("data-id");
+    let xhr = new XMLHttpRequest();
+    xhr.open("DELETE", "/alert/delete/" + id, true);
+    xhr.onreadystatechange = function() {
+      if(xhr.readyState === 4 && xhr.status === 200) {
+        alert("Alert was successfully deleted");
+        window.location.href = "/wallet";
+      }else if (xhr.readyState === 4) {
+        alert("Error deleting alert: " + xhr.responseText);
+      }
+    };
+    xhr.send(null);
+  }
+
 document.getElementById("deleteButton").addEventListener("click", function(event) {
   event.preventDefault();
   deleteWallet(this);
 });
+
+  document.getElementById("deleteAlert").addEventListener("click", function(event) {
+    event.preventDefault();
+    deleteAlert(this);
+  });
 
   // Toggle the side navigation
   $("#sidebarToggle, #sidebarToggleTop").on('click', function(e) {
