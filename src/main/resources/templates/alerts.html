@@ -71,8 +71,9 @@
                                     <td th:text="${alert.getStatus()}"></td>
                                     <td>
                                         <ul>
+                                            <li><a href="/">Edit</a></li>
                                             <li>
-                                                <a id="deleteAlert" href="#" th:attr="data-id=${alert.getAlertId()}">Delete</a>
+                                                <a class="deleteAlert" href="#" th:attr="data-id=${alert.getAlertId()}">Delete</a>
                                             </li>
                                         </ul>
                                     </td>
@@ -98,11 +99,6 @@
 </div>
 <!-- End of Page Wrapper -->
 
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-</a>
-
 <!-- Logout Modal-->
 <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
@@ -123,6 +119,22 @@
     </div>
 </div>
 
+<script>
+    function deleteAlert(element) {
+        let id = element.getAttribute("data-id");
+        let xhr = new XMLHttpRequest();
+        xhr.open("DELETE", "/alert/delete/" + id, true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                alert("Alert was successfully deleted");
+                window.location.href = "/alert";
+            } else if (xhr.readyState === 4) {
+                alert("Error deleting alert: " + xhr.responseText);
+            }
+        };
+        xhr.send(null);
+    }
+</script>
 <!-- Bootstrap core JavaScript-->
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

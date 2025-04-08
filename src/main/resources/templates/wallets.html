@@ -71,7 +71,7 @@
                                     <td>
                                         <ul>
                                             <li><a href="/">Edit</a></li>
-                                            <li><a id="deleteButton" href="#" th:attr="data-id=${wallet.getWalletId()}">Delete</a></li>
+                                            <li><a class="deleteButton" href="#" th:attr="data-id=${wallet.getWalletId()}">Delete</a></li>
                                         </ul>
                                     </td>
                                 </tr>
@@ -95,11 +95,6 @@
 
 </div>
 <!-- End of Page Wrapper -->
-
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-</a>
 
 <!-- Logout Modal-->
 <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"

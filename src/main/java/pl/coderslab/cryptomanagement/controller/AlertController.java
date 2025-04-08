@@ -3,10 +3,7 @@ package pl.coderslab.cryptomanagement.controller;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import pl.coderslab.cryptomanagement.entity.Alert;
 import pl.coderslab.cryptomanagement.entity.Coin;
 import pl.coderslab.cryptomanagement.entity.User;
@@ -77,5 +74,9 @@ public class AlertController extends GenericController<Alert> {
         return "alerts";
     }
 
-
+    @DeleteMapping("/delete/{id}")
+    public String deleteAlert(@PathVariable Long id) {
+        alertService.delete(id);
+        return "alerts";
+    }
 }
