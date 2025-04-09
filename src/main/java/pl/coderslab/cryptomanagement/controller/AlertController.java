@@ -1,7 +1,6 @@
 package pl.coderslab.cryptomanagement.controller;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,13 +9,11 @@ import pl.coderslab.cryptomanagement.entity.Alert;
 import pl.coderslab.cryptomanagement.entity.Coin;
 import pl.coderslab.cryptomanagement.entity.User;
 import pl.coderslab.cryptomanagement.service.AlertService;
-import pl.coderslab.cryptomanagement.repository.UserRepository;
 import pl.coderslab.cryptomanagement.service.CoinService;
 import pl.coderslab.cryptomanagement.service.UserService;
-
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
+
 
 @Controller
 @RequestMapping("/alert")
@@ -25,16 +22,22 @@ public class AlertController{
     private final CoinService coinService;
     private final UserService userService;
 
-    public AlertController(AlertService alertService, UserRepository userRepository, CoinService coinService, UserService userService) {
+    public AlertController(
+            AlertService alertService,
+            CoinService coinService,
+            UserService userService) {
         this.alertService = alertService;
         this.coinService = coinService;
         this.userService = userService;
     }
+    private User getUser(UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        return userService.loadByUsername(username).getBody();
+    }
 
     @GetMapping()
     public String getAlerts(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        String username = userDetails.getUsername();
-        User user = userService.loadByUsername(username).getBody();
+        User user = getUser(userDetails);
 
         List<Alert> alerts = alertService.loadAlertsByUser(user).getBody();
         model.addAttribute("alerts", alerts);
@@ -51,9 +54,9 @@ public class AlertController{
             @RequestParam("coin") String name,
             @RequestParam("target-price") BigDecimal price,
             @RequestParam("status") Boolean status,
-            @RequestParam("username") String username,
-            Model model) {
-        User user = userService.loadByUsername(username).getBody();
+            @AuthenticationPrincipal UserDetails userDetails
+            ) {
+        User user = getUser(userDetails);
         Coin coin = coinService.loadByName(name).getBody();
 
         Alert alert = new Alert();
@@ -63,7 +66,6 @@ public class AlertController{
         alert.setPriceTarget(price);
 
         alertService.add(alert);
-        model.addAttribute("message", "Wallet added successfully");
         return "redirect:/alert";
     }
 
