@@ -25,7 +25,7 @@ public class WalletController {
     }
 
     @GetMapping()
-    public String getWallet(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    public String getWallets(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         User user = userService.getUser(userDetails);
 
         List<Wallet> wallets = walletService.loadWalletsByUser(user).getBody();
@@ -34,7 +34,7 @@ public class WalletController {
     }
 
     @GetMapping("/add")
-    public String addWallet() {
+    public String getWallet() {
         return "add-wallet-form";
     }
 
