@@ -47,19 +47,34 @@
         });
     });
 
-    // Toggle the side navigation
-    $("#sidebarToggle, #sidebarToggleTop").on('click', function (e) {
-        $("body").toggleClass("sidebar-toggled");
-        $(".sidebar").toggleClass("toggled");
-        if ($(".sidebar").hasClass("toggled")) {
-            $('.sidebar .collapse').collapse('hide');
-            $(".sidebar-brand .mx-3").text("Crypto")
-            $(".sidebar-brand-icon").addClass("toggled")
-        } else {
-            $(".sidebar-brand .mx-3").html("Crypto<sup>MGMT</sup>")
-            $(".sidebar-brand-icon").removeClass("toggled")
-        }
-    });
+    function time() {
+        const now = new Date();
+        const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const difference = now - midnight;
+        const hours = Math.floor(difference / (1000 * 60 * 60));
+        const minutes = Math.floor(difference % (1000 * 60 * 60) / (1000 * 60));
+
+        let timeElapsed = `${hours}:${minutes}`;
+
+        document.getElementById("clock").innerText = `${timeElapsed}`;
+    }
+
+    setInterval(time, 60000);
+    time();
+
+  // Toggle the side navigation
+  $("#sidebarToggle, #sidebarToggleTop").on('click', function(e) {
+    $("body").toggleClass("sidebar-toggled");
+    $(".sidebar").toggleClass("toggled");
+    if ($(".sidebar").hasClass("toggled")) {
+      $('.sidebar .collapse').collapse('hide');
+      $(".sidebar-brand .mx-3").text("Crypto")
+      $(".sidebar-brand-icon").addClass("toggled")
+    } else {
+      $(".sidebar-brand .mx-3").html("Crypto<sup>MGMT</sup>")
+      $(".sidebar-brand-icon").removeClass("toggled")
+    }
+  });
 
     // Close any open menu accordions when window is resized below 768px
     $(window).resize(function () {
