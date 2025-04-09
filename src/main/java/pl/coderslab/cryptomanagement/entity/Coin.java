@@ -27,7 +27,6 @@ public class Coin {
     @NotEmpty
     private String symbol;
 
-    @NotEmpty
     private String description;
 
     @CreationTimestamp

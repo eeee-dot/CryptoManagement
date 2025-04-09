@@ -1,54 +1,47 @@
 package pl.coderslab.cryptomanagement.api;
 
 import org.json.JSONObject;
+
+import java.io.IOException;
 import java.net.URL;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 
-public class MainApi {
-    private static final String API_KEY = "";
+public class CoinMarketCapAPI {
+    private static final String API_KEY = "22bd0777-a2c3-41c0-abe0-fa97683c4db4";
     private static final String API_URL = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest";
-    public static void main(String[] args) {
+
+    public static JSONObject getAPIResponse() {
         try {
-            // Create URL object
-            URL url = new URL(API_URL);
+            JSONObject jsonResponse = getJsonObject();
 
-            // Open connection
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setRequestProperty("X-CMC_PRO_API_KEY", API_KEY);
-            connection.setRequestProperty("Accept", "application/json");
+            if (jsonResponse.has("data")) {
+                return jsonResponse;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-            // Read the response
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+    private static JSONObject getJsonObject() throws IOException {
+        URL url = new URL(API_URL);
+
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("X-CMC_PRO_API_KEY", API_KEY);
+        connection.setRequestProperty("Accept", "application/json");
+
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
             String inputLine;
             StringBuilder content = new StringBuilder();
             while ((inputLine = in.readLine()) != null) {
                 content.append(inputLine);
             }
-
-            // Close connections
-            in.close();
+            return new JSONObject(content.toString());
+        } finally {
             connection.disconnect();
-
-            // Parse JSON response
-            JSONObject jsonResponse = new JSONObject(content.toString());
-            System.out.println(jsonResponse.toString(2)); // Pretty print JSON response
-
-            // Example of reading specific data
-            if (jsonResponse.has("data")) {
-                System.out.println("First cryptocurrency name: "
-                        + jsonResponse.getJSONArray("data").getJSONObject(0).getString("name"));
-                System.out.println("First cryptocurrency symbol: "
-                        + jsonResponse.getJSONArray("data").getJSONObject(0).getString("symbol"));
-                System.out.println("First cryptocurrency creation date: "
-                        + jsonResponse.getJSONArray("data").getJSONObject(0).getString("date_added"));
-                System.out.println("First cryptocurrency market cap: "
-                        + jsonResponse.getJSONArray("data").getJSONObject(0).getJSONObject("quote").getJSONObject("USD").getDouble("market_cap"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }

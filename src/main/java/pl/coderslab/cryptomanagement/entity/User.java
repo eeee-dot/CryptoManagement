@@ -35,6 +35,6 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Alert> alerts;
 
-    @OneToOne
-    private Portfolio portfolio;
+    @OneToMany
+    private List<Coin> coins;
 }

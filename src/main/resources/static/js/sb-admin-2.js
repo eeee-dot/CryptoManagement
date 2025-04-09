@@ -54,7 +54,7 @@
         const hours = Math.floor(difference / (1000 * 60 * 60));
         const minutes = Math.floor(difference % (1000 * 60 * 60) / (1000 * 60));
 
-        let timeElapsed = `${hours}:${minutes}`;
+        let timeElapsed = `${hours}h:${minutes}m`;
 
         document.getElementById("clock").innerText = `${timeElapsed}`;
     }
