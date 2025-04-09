@@ -58,4 +58,9 @@ public class UserService extends GenericService<User> implements UserDetailsServ
         }
         throw new ResourceNotFoundException("No user found");
     }
+
+    public User getUser(UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        return loadByUsername(username).getBody();
+    }
 }

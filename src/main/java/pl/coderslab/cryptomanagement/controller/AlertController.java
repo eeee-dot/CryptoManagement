@@ -11,13 +11,14 @@ import pl.coderslab.cryptomanagement.entity.User;
 import pl.coderslab.cryptomanagement.service.AlertService;
 import pl.coderslab.cryptomanagement.service.CoinService;
 import pl.coderslab.cryptomanagement.service.UserService;
+
 import java.math.BigDecimal;
 import java.util.List;
 
 
 @Controller
 @RequestMapping("/alert")
-public class AlertController{
+public class AlertController {
     private final AlertService alertService;
     private final CoinService coinService;
     private final UserService userService;
@@ -30,14 +31,10 @@ public class AlertController{
         this.coinService = coinService;
         this.userService = userService;
     }
-    private User getUser(UserDetails userDetails) {
-        String username = userDetails.getUsername();
-        return userService.loadByUsername(username).getBody();
-    }
 
     @GetMapping()
     public String getAlerts(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        User user = getUser(userDetails);
+        User user = userService.getUser(userDetails);
 
         List<Alert> alerts = alertService.loadAlertsByUser(user).getBody();
         model.addAttribute("alerts", alerts);
@@ -55,8 +52,8 @@ public class AlertController{
             @RequestParam("target-price") BigDecimal price,
             @RequestParam("status") Boolean status,
             @AuthenticationPrincipal UserDetails userDetails
-            ) {
-        User user = getUser(userDetails);
+    ) {
+        User user = userService.getUser(userDetails);
         Coin coin = coinService.loadByName(name).getBody();
 
         Alert alert = new Alert();
