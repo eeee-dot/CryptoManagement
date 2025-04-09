@@ -45,8 +45,6 @@
                     <div class="container mt-5">
                         <h1 class="mb-4">Add alert</h1>
                         <form action="/alert/add" method="post">
-                            <input type="hidden" id="usernameInput" name="username" />
-
                             <div class="form-group">
                                 <label for="coin">Coin</label>
                                 <input type="text" class="form-control" id="coin" name="coin" required>
@@ -105,10 +103,6 @@
         </div>
     </div>
 
-<script>
-    let username = document.getElementById("userDropdown").innerText;
-    document.getElementById("usernameInput").value = username;
-</script>
     <!-- Bootstrap core JavaScript-->
     <script src="/vendor/jquery/jquery.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
