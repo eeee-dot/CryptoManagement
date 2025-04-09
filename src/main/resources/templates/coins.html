@@ -58,7 +58,6 @@
                                     <th>Symbol</th>
                                     <th>Market Cap [$]</th>
                                     <th>Price [$]</th>
-                                    <th>Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -67,9 +66,6 @@
                                     <td th:text="${coin.getSymbol()}"></td>
                                     <td th:text="${coin.getMarketCap()}"></td>
                                     <td th:text="${coin.getPrice()}"></td>
-                                    <td>
-                                        <a href="/home">Delete</a>
-                                    </td>
                                 </tr>
                                 </tbody>
                             </table>

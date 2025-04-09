@@ -6,12 +6,15 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import pl.coderslab.cryptomanagement.dto.UserDTO;
+import pl.coderslab.cryptomanagement.entity.Coin;
 import pl.coderslab.cryptomanagement.entity.User;
 import pl.coderslab.cryptomanagement.entity.UserPrincipal;
 import pl.coderslab.cryptomanagement.exception.ResourceNotFoundException;
 import pl.coderslab.cryptomanagement.generic.GenericService;
 import pl.coderslab.cryptomanagement.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Optional;
 
 @Service
 public class UserService extends GenericService<User> implements UserDetailsService {
@@ -46,5 +49,13 @@ public class UserService extends GenericService<User> implements UserDetailsServ
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         return new UserPrincipal(user);
+    }
+
+    public ResponseEntity<User> loadByUsername(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        }
+        throw new ResourceNotFoundException("No user found");
     }
 }

@@ -65,7 +65,7 @@ public class WalletController extends GenericController<Wallet> {
 
         walletService.add(wallet);
         model.addAttribute("message", "Wallet added successfully");
-        return "wallets";
+        return "redirect:/wallet";
     }
 
     @DeleteMapping("/delete/{id}")

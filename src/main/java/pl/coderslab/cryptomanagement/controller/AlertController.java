@@ -11,6 +11,7 @@ import pl.coderslab.cryptomanagement.generic.GenericController;
 import pl.coderslab.cryptomanagement.service.AlertService;
 import pl.coderslab.cryptomanagement.repository.UserRepository;
 import pl.coderslab.cryptomanagement.service.CoinService;
+import pl.coderslab.cryptomanagement.service.UserService;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -22,12 +23,14 @@ public class AlertController extends GenericController<Alert> {
     private final AlertService alertService;
     private final UserRepository userRepository;
     private final CoinService coinService;
+    private final UserService userService;
 
-    public AlertController(AlertService alertService, UserRepository userRepository, CoinService coinService) {
+    public AlertController(AlertService alertService, UserRepository userRepository, CoinService coinService, UserService userService) {
         super(alertService, Alert.class);
         this.alertService = alertService;
         this.userRepository = userRepository;
         this.coinService = coinService;
+        this.userService = userService;
     }
 
     @GetMapping()
@@ -56,22 +59,18 @@ public class AlertController extends GenericController<Alert> {
             @RequestParam("status") Boolean status,
             @RequestParam("username") String username,
             Model model) {
-        Optional<User> user = userRepository.findByUsername(username);
-        if (user.isEmpty()) {
-            return "404";
-        }
-
+        User user = userService.loadByUsername(username).getBody();
         Coin coin = coinService.loadByName(name).getBody();
 
         Alert alert = new Alert();
-        alert.setUser(user.get());
+        alert.setUser(user);
         alert.setCoin(coin);
         alert.setStatus(status);
         alert.setPriceTarget(price);
 
         alertService.add(alert);
         model.addAttribute("message", "Wallet added successfully");
-        return "alerts";
+        return "redirect:/alert";
     }
 
     @DeleteMapping("/delete/{id}")

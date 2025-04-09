@@ -62,6 +62,6 @@ public class CoinService extends GenericService<Coin> {
         if (coin.isPresent()) {
             return ResponseEntity.ok(coin.get());
         }
-        throw new ResourceNotFoundException("Not coin found");
+        throw new ResourceNotFoundException("No coin found");
     }
 }
