@@ -2,6 +2,8 @@ package pl.coderslab.cryptomanagement.controller;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,9 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import pl.coderslab.cryptomanagement.api.CoinMarketCapAPI;
 import pl.coderslab.cryptomanagement.entity.Coin;
 import pl.coderslab.cryptomanagement.entity.Price;
+import pl.coderslab.cryptomanagement.entity.User;
+import pl.coderslab.cryptomanagement.entity.Wallet;
 import pl.coderslab.cryptomanagement.generic.GenericController;
 import pl.coderslab.cryptomanagement.service.CoinService;
 import pl.coderslab.cryptomanagement.service.PriceService;
+import pl.coderslab.cryptomanagement.service.UserService;
+import pl.coderslab.cryptomanagement.service.WalletService;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -23,11 +29,15 @@ import java.util.stream.Collectors;
 public class CoinController extends GenericController<Coin> {
     private final CoinService coinService;
     private final PriceService priceService;
+    private final WalletService walletService;
+    private final UserService userService;
 
-    public CoinController(CoinService coinService, PriceService priceService) {
+    public CoinController(CoinService coinService, PriceService priceService, WalletService walletService, UserService userService) {
         super(coinService, Coin.class);
         this.coinService = coinService;
         this.priceService = priceService;
+        this.walletService = walletService;
+        this.userService = userService;
     }
 
     @GetMapping()
@@ -69,11 +79,17 @@ public class CoinController extends GenericController<Coin> {
     }
 
     @GetMapping("/add")
-    public String addCoinView(Model model) {
+    public String addCoinView(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         List<Coin> coins = coinService.getAll().getBody();
         if (coins != null) {
             List<String> coinNames = coins.stream().map(Coin::getName).toList();
             model.addAttribute("coinNames", coinNames);
+        }
+        User user = userService.getUser(userDetails);
+        List<Wallet> wallets = walletService.loadWalletsByUser(user).getBody();
+        if (wallets != null) {
+            List<String> walletNames = wallets.stream().map(Wallet::getName).toList();
+            model.addAttribute("walletNames", walletNames);
         }
         return "add-coin-form";
     }
