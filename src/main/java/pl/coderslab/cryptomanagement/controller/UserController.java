@@ -1,10 +1,11 @@
 package pl.coderslab.cryptomanagement.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pl.coderslab.cryptomanagement.ApplicationSecurityConfig;
 import pl.coderslab.cryptomanagement.dto.UserDTO;
 import pl.coderslab.cryptomanagement.entity.User;
 import pl.coderslab.cryptomanagement.exception.UnmatchedPasswordsException;
@@ -17,10 +18,12 @@ import java.util.Objects;
 @RequestMapping("/user")
 public class UserController extends GenericController<User> {
     private final UserService userService;
+    private PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
         super(userService, User.class);
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PatchMapping("/user")
@@ -48,7 +51,9 @@ public class UserController extends GenericController<User> {
         User newUser = new User();
         newUser.setUsername(username);
         newUser.setEmail(email);
-        newUser.setPasswordHash(password);
+
+        String hashedPassword = passwordEncoder.encode(password);
+        newUser.setPasswordHash(hashedPassword);
 
         userService.add(newUser);
 
