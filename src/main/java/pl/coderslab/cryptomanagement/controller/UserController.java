@@ -5,8 +5,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.cryptomanagement.dto.UserDTO;
 import pl.coderslab.cryptomanagement.entity.User;
+import pl.coderslab.cryptomanagement.exception.UnmatchedPasswordsException;
 import pl.coderslab.cryptomanagement.generic.GenericController;
 import pl.coderslab.cryptomanagement.service.UserService;
+
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/user")
@@ -34,10 +37,10 @@ public class UserController extends GenericController<User> {
                           @RequestParam String email,
                           @RequestParam String password,
                           @RequestParam String repeatedPassword) {
-        System.out.println(password);
-        System.out.println(repeatedPassword);
+
+        if (!Objects.equals(password, repeatedPassword)) {
+            throw new UnmatchedPasswordsException();
+        }
         return "login";
     }
-
-
 }
