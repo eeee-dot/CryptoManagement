@@ -16,6 +16,7 @@ import pl.coderslab.cryptomanagement.service.PriceService;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/coin")
@@ -41,7 +42,7 @@ public class CoinController extends GenericController<Coin> {
         JSONObject jsonResponse = CoinMarketCapAPI.getAPIResponse();
         if (jsonResponse != null) {
             JSONArray data = jsonResponse.getJSONArray("data");
-            for(int i = 0; i < data.length(); i++) {
+            for (int i = 0; i < data.length(); i++) {
                 JSONObject coin = data.getJSONObject(i);
                 Coin newCoin = new Coin();
                 newCoin.setName(coin.getString("name"));
@@ -50,7 +51,7 @@ public class CoinController extends GenericController<Coin> {
                 newCoin.setCreatedAt(LocalDateTime.parse(coin.getString("date_added"), formatter));
                 newCoin.setMarketCap(coin.getJSONObject("quote").getJSONObject("USD").getBigDecimal("market_cap"));
                 newCoin.setDescription("new coin");
-               coinService.add(newCoin).getBody();
+                coinService.add(newCoin).getBody();
 
                 Price price = new Price();
                 price.setPrice(coin.getJSONObject("quote").getJSONObject("USD").getBigDecimal("price"));
@@ -67,5 +68,14 @@ public class CoinController extends GenericController<Coin> {
         return "redirect:/coin";
     }
 
+    @GetMapping("/add")
+    public String addCoinView(Model model) {
+        List<Coin> coins = coinService.getAll().getBody();
+        if (coins != null) {
+            List<String> coinNames = coins.stream().map(Coin::getName).toList();
+            model.addAttribute("coinNames", coinNames);
+        }
+        return "add-coin-form";
+    }
 
 }
