@@ -60,12 +60,11 @@ public class CoinController extends GenericController<Coin> {
                 Coin secCoin = coinService.loadByName(coin.getString("name")).getBody();
                 price.setCoin(secCoin);
                 newCoin.setPrice(price);
-                System.out.println(newCoin);
-                System.out.println(price);
+
                 coinService.add(newCoin);
             }
         }
-        return "redirect:/coins";
+        return "redirect:/coin";
     }
 
 
