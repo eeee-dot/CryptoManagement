@@ -23,7 +23,7 @@ public class ApplicationSecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/fonts/**", "/img/**", "/js/**", "/css/**", "/scss/**", "/vendor/**").permitAll()
+                        .requestMatchers("/fonts/**", "/img/**", "/js/**", "/css/**", "/scss/**", "/vendor/**", "/user/add").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin -> formLogin

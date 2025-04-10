@@ -2,6 +2,7 @@ package pl.coderslab.cryptomanagement.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.coderslab.cryptomanagement.dto.UserDTO;
@@ -23,6 +24,11 @@ public class UserController extends GenericController<User> {
     public ResponseEntity<User> updateUser() {
         userService.update(1L, new UserDTO());
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/add")
+    public String addUserView() {
+        return "add-user-form";
     }
 
 
