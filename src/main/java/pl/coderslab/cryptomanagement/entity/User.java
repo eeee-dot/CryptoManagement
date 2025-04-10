@@ -26,7 +26,7 @@ public class User {
     @Email
     private String email;
     @NotEmpty
-    @Size(min = 8)
+    @Size(min = 2)
     private String passwordHash;
 
     @CreationTimestamp

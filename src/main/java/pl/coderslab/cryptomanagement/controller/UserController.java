@@ -41,6 +41,13 @@ public class UserController extends GenericController<User> {
         if (!Objects.equals(password, repeatedPassword)) {
             throw new UnmatchedPasswordsException();
         }
-        return "login";
+        User newUser = new User();
+        newUser.setUsername(username);
+        newUser.setEmail(email);
+        newUser.setPasswordHash(password);
+
+        userService.add(newUser);
+
+        return "redirect:login";
     }
 }
