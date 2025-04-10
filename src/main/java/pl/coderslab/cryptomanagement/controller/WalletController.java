@@ -63,4 +63,12 @@ public class WalletController {
         walletService.delete(id);
         return "wallets";
     }
+
+    @PostMapping("/add-coin")
+    public String addCoinToWallet(@RequestParam String coinName,
+                                  @RequestParam BigDecimal amount,
+                                  @RequestParam String walletName) {
+
+        return "redirect:/wallets";
+    }
 }

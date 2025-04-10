@@ -11,6 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -38,4 +39,10 @@ public class Coin {
     @OneToOne(mappedBy = "coin", cascade = CascadeType.ALL)
     @ToString.Exclude
     private Price price;
+
+    @ManyToMany(mappedBy = "coins")
+    private List<User> users;
+
+    @ManyToMany(mappedBy = "coins")
+    private List<Wallet> wallets;
 }

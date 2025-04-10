@@ -93,5 +93,4 @@ public class CoinController extends GenericController<Coin> {
         }
         return "add-coin-form";
     }
-
 }
