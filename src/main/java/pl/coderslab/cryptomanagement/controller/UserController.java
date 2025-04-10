@@ -7,23 +7,28 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.coderslab.cryptomanagement.ApplicationSecurityConfig;
 import pl.coderslab.cryptomanagement.dto.UserDTO;
+import pl.coderslab.cryptomanagement.entity.Portfolio;
 import pl.coderslab.cryptomanagement.entity.User;
 import pl.coderslab.cryptomanagement.exception.UnmatchedPasswordsException;
 import pl.coderslab.cryptomanagement.generic.GenericController;
+import pl.coderslab.cryptomanagement.service.PortfolioService;
 import pl.coderslab.cryptomanagement.service.UserService;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Controller
 @RequestMapping("/user")
 public class UserController extends GenericController<User> {
     private final UserService userService;
+    private final PortfolioService portfolioService;
     private PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder, PortfolioService portfolioService) {
         super(userService, User.class);
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.portfolioService = portfolioService;
     }
 
     @PatchMapping("/user")
@@ -42,8 +47,7 @@ public class UserController extends GenericController<User> {
                           @RequestParam String email,
                           @RequestParam String password,
                           @RequestParam String repeatedPassword,
-                         RedirectAttributes redirectAttributes
-  ) {
+                          RedirectAttributes redirectAttributes) {
 
         if (!Objects.equals(password, repeatedPassword)) {
             throw new UnmatchedPasswordsException();
@@ -55,7 +59,12 @@ public class UserController extends GenericController<User> {
         String hashedPassword = passwordEncoder.encode(password);
         newUser.setPasswordHash(hashedPassword);
 
+        Portfolio portfolio = new Portfolio();
+        portfolio.setUser(newUser);
+        portfolio.setTotalValue(BigDecimal.valueOf(0));
+
         userService.add(newUser);
+        portfolioService.add(portfolio);
 
         redirectAttributes.addFlashAttribute("message", "Account created successfully.<br>Please log in.");
         return "redirect:/login";

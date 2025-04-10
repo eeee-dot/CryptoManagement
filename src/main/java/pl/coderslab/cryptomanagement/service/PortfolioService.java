@@ -1,6 +1,8 @@
 package pl.coderslab.cryptomanagement.service;
 
 import jakarta.validation.Validator;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.coderslab.cryptomanagement.dto.PortfolioDTO;
@@ -10,6 +12,9 @@ import pl.coderslab.cryptomanagement.exception.ResourceNotFoundException;
 import pl.coderslab.cryptomanagement.generic.GenericService;
 import pl.coderslab.cryptomanagement.repository.PortfolioRepository;
 import pl.coderslab.cryptomanagement.repository.UserRepository;
+
+import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -45,6 +50,12 @@ public class PortfolioService extends GenericService<Portfolio> {
                     return ResponseEntity.ok(portfolioRepository.save(portfolioToUpdate));
                 })
                 .orElseThrow(() -> new ResourceNotFoundException(id));
+    }
+
+    public Optional<Portfolio> getLatestPortfolioByUserId(Long userId) {
+        Pageable pageable = PageRequest.of(0,1);
+        List<Portfolio> portfolios = portfolioRepository.findLatestPortfolioByUserId(userId, pageable);
+        return portfolios.isEmpty() ? Optional.empty() : Optional.of(portfolios.get(0));
     }
 
 }
