@@ -2,7 +2,9 @@ package pl.coderslab.cryptomanagement.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.coderslab.cryptomanagement.dto.UserDTO;
 import pl.coderslab.cryptomanagement.entity.User;
 import pl.coderslab.cryptomanagement.exception.UnmatchedPasswordsException;
@@ -36,7 +38,9 @@ public class UserController extends GenericController<User> {
     public String addUser(@RequestParam String username,
                           @RequestParam String email,
                           @RequestParam String password,
-                          @RequestParam String repeatedPassword) {
+                          @RequestParam String repeatedPassword,
+                         RedirectAttributes redirectAttributes
+  ) {
 
         if (!Objects.equals(password, repeatedPassword)) {
             throw new UnmatchedPasswordsException();
@@ -48,6 +52,7 @@ public class UserController extends GenericController<User> {
 
         userService.add(newUser);
 
-        return "redirect:login";
+        redirectAttributes.addFlashAttribute("message", "Account created successfully.<br>Please log in.");
+        return "redirect:/login";
     }
 }
