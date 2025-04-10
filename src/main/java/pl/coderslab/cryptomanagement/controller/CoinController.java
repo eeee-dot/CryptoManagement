@@ -8,11 +8,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import pl.coderslab.cryptomanagement.api.CoinMarketCapAPI;
 import pl.coderslab.cryptomanagement.entity.Coin;
 import pl.coderslab.cryptomanagement.entity.Price;
-import pl.coderslab.cryptomanagement.entity.User;
-import pl.coderslab.cryptomanagement.entity.Wallet;
 import pl.coderslab.cryptomanagement.generic.GenericController;
 import pl.coderslab.cryptomanagement.service.CoinService;
 import pl.coderslab.cryptomanagement.service.PriceService;
@@ -22,10 +22,11 @@ import pl.coderslab.cryptomanagement.service.WalletService;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Controller
 @RequestMapping("/coin")
+@SessionAttributes("walletId")
 public class CoinController extends GenericController<Coin> {
     private final CoinService coinService;
     private final PriceService priceService;
@@ -60,7 +61,6 @@ public class CoinController extends GenericController<Coin> {
                 DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
                 newCoin.setCreatedAt(LocalDateTime.parse(coin.getString("date_added"), formatter));
                 newCoin.setMarketCap(coin.getJSONObject("quote").getJSONObject("USD").getBigDecimal("market_cap"));
-                newCoin.setDescription("new coin");
                 coinService.add(newCoin).getBody();
 
                 Price price = new Price();
@@ -79,18 +79,15 @@ public class CoinController extends GenericController<Coin> {
     }
 
     @GetMapping("/add")
-    public String addCoinView(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    public String addCoinView(Model model, @AuthenticationPrincipal UserDetails userDetails, @RequestParam Long walletId) {
         List<Coin> coins = coinService.getAll().getBody();
         if (coins != null) {
             List<String> coinNames = coins.stream().map(Coin::getName).toList();
             model.addAttribute("coinNames", coinNames);
         }
-        User user = userService.getUser(userDetails);
-        List<Wallet> wallets = walletService.loadWalletsByUser(user).getBody();
-        if (wallets != null) {
-            List<String> walletNames = wallets.stream().map(Wallet::getName).toList();
-            model.addAttribute("walletNames", walletNames);
-        }
+
+        System.out.println("Coin controller" + walletId);
+        model.addAttribute("walletId", walletId);
         return "add-coin-form";
     }
 }

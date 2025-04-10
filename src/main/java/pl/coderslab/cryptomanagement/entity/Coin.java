@@ -28,8 +28,6 @@ public class Coin {
     @NotEmpty
     private String symbol;
 
-    private String description;
-
     @CreationTimestamp
     private LocalDateTime createdAt;
 
@@ -43,6 +41,6 @@ public class Coin {
     @ManyToMany(mappedBy = "coins")
     private List<User> users;
 
-    @ManyToMany(mappedBy = "coins")
-    private List<Wallet> wallets;
+   @OneToMany(mappedBy = "coin", cascade = CascadeType.ALL)
+    private List<WalletCoin> walletCoins;
 }

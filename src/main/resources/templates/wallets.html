@@ -69,7 +69,7 @@
                                     <td th:text="${wallet.getAddress()}"></td>
                                     <td>
                                         <ul>
-                                            <li><a href="/">Edit</a></li>
+                                            <li><a th:href="@{/coin/add(walletId=${wallet.getWalletId()})}">Add coin</a></li>
                                             <li><a class="deleteButton" href="#" th:attr="data-id=${wallet.getWalletId()}">Delete</a></li>
                                         </ul>
                                     </td>

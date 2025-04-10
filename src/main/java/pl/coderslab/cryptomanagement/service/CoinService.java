@@ -36,9 +36,6 @@ public class CoinService extends GenericService<Coin> {
                     if (coinDTO.getSymbol() != null) {
                         coinToUpdate.setSymbol(coinDTO.getSymbol());
                     }
-                    if (coinDTO.getDescription() != null) {
-                        coinToUpdate.setDescription(coinDTO.getDescription());
-                    }
                     if (coinDTO.getCreatedAt() != null) {
                         coinToUpdate.setCreatedAt(coinDTO.getCreatedAt());
                     }
