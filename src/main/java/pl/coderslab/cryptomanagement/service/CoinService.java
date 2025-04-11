@@ -13,6 +13,7 @@ import pl.coderslab.cryptomanagement.generic.GenericService;
 import pl.coderslab.cryptomanagement.repository.CoinRepository;
 import pl.coderslab.cryptomanagement.repository.PriceRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,5 +61,10 @@ public class CoinService extends GenericService<Coin> {
             return ResponseEntity.ok(coin.get());
         }
         throw new ResourceNotFoundException("No coin found");
+    }
+
+    public BigDecimal getCoinPrice(Coin coin) {
+        Price price = coin.getPrice();
+        return price.getPrice();
     }
 }

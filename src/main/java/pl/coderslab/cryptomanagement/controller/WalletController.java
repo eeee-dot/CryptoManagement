@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @SessionAttributes("walletId")
@@ -40,8 +41,15 @@ public class WalletController {
 
         List<Wallet> wallets = walletService.loadWalletsByUser(user).getBody();
         model.addAttribute("wallets", wallets);
+
+        if (wallets != null) {
+            List<BigDecimal> totalValues = walletService.calculateTotalValues(wallets);
+            model.addAttribute("totalValues", totalValues);
+        }
+
         return "wallets";
     }
+
 
     @GetMapping("/add")
     public String getWallet() {
@@ -89,23 +97,20 @@ public class WalletController {
             return "404";
         }
 
-        List<WalletCoin> walletCoins = wallet.getWalletCoins();
-        for (WalletCoin walletCoin : walletCoins) {
-            if (walletCoin.getCoin().equals(coin)) {
-                walletCoin.setAmount(walletCoin.getAmount().add(amount));
-                walletCoinService.save(walletCoin);
-            }
+        Optional<WalletCoin> optionalWalletCoin = walletCoinService.findByWalletAndCoin(wallet, coin);
+        if (optionalWalletCoin.isPresent()) {
+            WalletCoin walletCoin = optionalWalletCoin.get();
+            walletCoinService.update(walletCoin, amount);
+        } else {
+            WalletCoin walletCoin = new WalletCoin();
+            walletCoin.setWallet(wallet);
+            walletCoin.setCoin(coin);
+            walletCoin.setAmount(amount);
+            walletCoinService.save(walletCoin);
+
+            wallet.getWalletCoins().add(walletCoin);
+            walletService.add(wallet);
         }
-
-        WalletCoin walletCoin = new WalletCoin();
-        walletCoin.setWallet(wallet);
-        walletCoin.setCoin(coin);
-        walletCoin.setAmount(amount);
-        walletCoinService.save(walletCoin);
-
-        walletCoins.add(walletCoin);
-
-        walletService.add(wallet);
 
         sessionStatus.setComplete();
         return "redirect:/wallet";

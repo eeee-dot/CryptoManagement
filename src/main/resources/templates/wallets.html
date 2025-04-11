@@ -63,9 +63,9 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="wallet : ${wallets}">
+                                <tr th:each="wallet, iterStat : ${wallets}">
                                     <td th:text="${wallet.getName()}"></td>
-                                    <td th:text="${wallet.getBalance()}"></td>
+                                    <td th:text="${totalValues[iterStat.index]}"></td>
                                     <td th:text="${wallet.getAddress()}"></td>
                                     <td>
                                         <ul>

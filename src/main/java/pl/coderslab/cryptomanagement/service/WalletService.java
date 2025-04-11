@@ -15,22 +15,26 @@ import pl.coderslab.cryptomanagement.repository.CoinRepository;
 import pl.coderslab.cryptomanagement.repository.UserRepository;
 import pl.coderslab.cryptomanagement.repository.WalletRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class WalletService extends GenericService<Wallet> {
     private final WalletRepository walletRepository;
     private final UserRepository userRepository;
     private final CoinRepository coinRepository;
+    private final CoinService coinService;
 
-    public WalletService(WalletRepository walletRepository, Validator validator, UserRepository userRepository, CoinRepository coinRepository) {
+    public WalletService(WalletRepository walletRepository, Validator validator, UserRepository userRepository, CoinRepository coinRepository, CoinService coinService) {
         super(walletRepository, validator);
         this.walletRepository = walletRepository;
         this.userRepository = userRepository;
         this.coinRepository = coinRepository;
+        this.coinService = coinService;
     }
-    
+
     public ResponseEntity<Wallet> update(Long id, WalletDTO walletDTO) {
         return walletRepository.findById(id)
                 .map(walletToUpdate -> {
@@ -47,19 +51,19 @@ public class WalletService extends GenericService<Wallet> {
 
                         walletToUpdate.setUser(user);
                     }
-                    if(walletDTO.getCoins() != null) {
-                        for(WalletCoinDTO coinDTO : walletDTO.getCoins()) {
-                            Coin coin = coinRepository.findById(coinDTO.getCoinId())
-                                    .orElseThrow(() -> new ResourceNotFoundException(coinDTO.getCoinId()));
-
-                            for (WalletCoin walletCoin : walletToUpdate.getWalletCoins()) {
-                                if(walletCoin.getCoin().equals(coin)) {
-                                    walletCoin.setAmount(walletCoin.getAmount().add(coinDTO.getAmount()));
-                                    walletToUpdate.getWalletCoins().add(walletCoin);
-                                }
-                            }
-                        }
-                    }
+//                    if(walletDTO.getCoins() != null) {
+//                        for(WalletCoinDTO coinDTO : walletDTO.getCoins()) {
+//                            Coin coin = coinRepository.findById(coinDTO.getCoin())
+//                                    .orElseThrow(() -> new ResourceNotFoundException(coinDTO.getCoin()));
+//
+//                            for (WalletCoin walletCoin : walletToUpdate.getWalletCoins()) {
+//                                if(walletCoin.getCoin().equals(coin)) {
+//                                    walletCoin.setAmount(walletCoin.getAmount().add(coinDTO.getAmount()));
+//                                    walletToUpdate.getWalletCoins().add(walletCoin);
+//                                }
+//                            }
+//                        }
+//                    }
 
                     return ResponseEntity.ok(walletRepository.save(walletToUpdate));
                 })
@@ -74,5 +78,21 @@ public class WalletService extends GenericService<Wallet> {
         throw new ResourceNotFoundException("Not user found");
     }
 
+    public BigDecimal calculateTotalValue(Wallet wallet) {
+        List<WalletCoin> walletCoins = wallet.getWalletCoins();
+
+        if (walletCoins == null) {
+            return BigDecimal.ZERO;
+        }
+
+        return walletCoins.stream().map(walletCoin -> {
+            BigDecimal coinPrice = coinService.getCoinPrice(walletCoin.getCoin());
+            return walletCoin.getAmount().multiply(coinPrice);
+        }).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public List<BigDecimal> calculateTotalValues(List<Wallet> wallets) {
+        return wallets.stream().map(this::calculateTotalValue).collect(Collectors.toList());
+    }
 
 }
