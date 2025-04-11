@@ -3,9 +3,7 @@ package pl.coderslab.cryptomanagement.service;
 import jakarta.validation.Validator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import pl.coderslab.cryptomanagement.dto.WalletCoinDTO;
 import pl.coderslab.cryptomanagement.dto.WalletDTO;
-import pl.coderslab.cryptomanagement.entity.Coin;
 import pl.coderslab.cryptomanagement.entity.User;
 import pl.coderslab.cryptomanagement.entity.Wallet;
 import pl.coderslab.cryptomanagement.entity.WalletCoin;
@@ -78,7 +76,7 @@ public class WalletService extends GenericService<Wallet> {
         throw new ResourceNotFoundException("Not user found");
     }
 
-    public BigDecimal calculateTotalValue(Wallet wallet) {
+    public BigDecimal calculateWalletTotalValue(Wallet wallet) {
         List<WalletCoin> walletCoins = wallet.getWalletCoins();
 
         if (walletCoins == null) {
@@ -91,8 +89,13 @@ public class WalletService extends GenericService<Wallet> {
         }).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public List<BigDecimal> calculateTotalValues(List<Wallet> wallets) {
-        return wallets.stream().map(this::calculateTotalValue).collect(Collectors.toList());
+    public List<BigDecimal> calculateWalletsTotalValues(List<Wallet> wallets) {
+        return wallets.stream().map(this::calculateWalletTotalValue).collect(Collectors.toList());
+    }
+
+    public BigDecimal calculateTotalValue(List<Wallet> wallets) {
+        List<BigDecimal> balances = calculateWalletsTotalValues(wallets);
+        return balances.stream().reduce(BigDecimal::add).get();
     }
 
 }
