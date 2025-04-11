@@ -25,7 +25,6 @@ public class Price {
     @DecimalMin(value = "0.0", inclusive = false)
     private BigDecimal price;
 
-    @CreationTimestamp
     private LocalDateTime date;
 
     @OneToOne(fetch = FetchType.LAZY)

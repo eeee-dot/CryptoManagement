@@ -11,32 +11,24 @@ import pl.coderslab.cryptomanagement.generic.GenericService;
 import pl.coderslab.cryptomanagement.repository.CoinRepository;
 import pl.coderslab.cryptomanagement.repository.PriceRepository;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Service
 public class PriceService extends GenericService<Price> {
     private final PriceRepository priceRepository;
-    private final CoinRepository coinRepository;
+
 
     public PriceService(PriceRepository priceRepository, Validator validator, CoinRepository coinRepository) {
         super(priceRepository, validator);
         this.priceRepository = priceRepository;
-        this.coinRepository = coinRepository;
     }
 
-    public ResponseEntity<Price> update(Long id, PriceDTO priceDTO) {
+    public ResponseEntity<Price> update(Long id, BigDecimal price) {
         return priceRepository.findById(id)
                 .map(priceToUpdate -> {
-                    if (priceDTO.getPrice() != null) {
-                        priceToUpdate.setPrice(priceDTO.getPrice());
-                    }
-                    if (priceDTO.getCoinId() != null) {
-                        Coin coin = coinRepository
-                                .findById(priceDTO.getCoinId())
-                                .orElseThrow(() -> new ResourceNotFoundException(priceDTO.getCoinId()));
+                        priceToUpdate.setPrice(price);
 
-                        priceToUpdate.setCoin(coin);
-                    }
                     LocalDateTime current = LocalDateTime.now();
                     priceToUpdate.setDate(current);
 
@@ -44,4 +36,5 @@ public class PriceService extends GenericService<Price> {
                 })
                 .orElseThrow(() -> new ResourceNotFoundException(id));
     }
+
 }

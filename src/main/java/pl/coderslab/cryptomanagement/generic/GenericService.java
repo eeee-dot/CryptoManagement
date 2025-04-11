@@ -1,7 +1,6 @@
 package pl.coderslab.cryptomanagement.generic;
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import jakarta.validation.Validator;
 import org.springframework.http.HttpStatus;

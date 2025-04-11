@@ -6,55 +6,41 @@ import org.springframework.stereotype.Service;
 import pl.coderslab.cryptomanagement.dto.CoinDTO;
 import pl.coderslab.cryptomanagement.entity.Coin;
 import pl.coderslab.cryptomanagement.entity.Price;
-import pl.coderslab.cryptomanagement.entity.User;
 import pl.coderslab.cryptomanagement.entity.Wallet;
+import pl.coderslab.cryptomanagement.entity.WalletCoin;
 import pl.coderslab.cryptomanagement.exception.ResourceNotFoundException;
 import pl.coderslab.cryptomanagement.generic.GenericService;
 import pl.coderslab.cryptomanagement.repository.CoinRepository;
 import pl.coderslab.cryptomanagement.repository.PriceRepository;
 
-import java.util.List;
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @Service
 public class CoinService extends GenericService<Coin> {
     private final CoinRepository coinRepository;
     private final PriceRepository priceRepository;
+    private final PriceService priceService;
 
-    public CoinService(CoinRepository coinRepository, Validator validator, PriceRepository priceRepository) {
+    public CoinService(CoinRepository coinRepository, Validator validator, PriceRepository priceRepository, PriceService priceService) {
         super(coinRepository, validator);
         this.coinRepository = coinRepository;
         this.priceRepository = priceRepository;
+        this.priceService = priceService;
     }
 
-    public ResponseEntity<Coin> update(Long id, CoinDTO coinDTO) {
-        return coinRepository.findById(id)
-                .map(coinToUpdate -> {
-                    if (coinDTO.getName() != null) {
-                        coinToUpdate.setName(coinDTO.getName());
-                    }
-                    if (coinDTO.getSymbol() != null) {
-                        coinToUpdate.setSymbol(coinDTO.getSymbol());
-                    }
-                    if (coinDTO.getDescription() != null) {
-                        coinToUpdate.setDescription(coinDTO.getDescription());
-                    }
-                    if (coinDTO.getCreatedAt() != null) {
-                        coinToUpdate.setCreatedAt(coinDTO.getCreatedAt());
-                    }
-                    if (coinDTO.getMarketCap() != null) {
-                        coinToUpdate.setMarketCap(coinDTO.getMarketCap());
-                    }
-                    if (coinDTO.getPriceId() != null) {
-                        Price price = priceRepository
-                                .findById(coinDTO.getPriceId())
-                                .orElseThrow(() -> new ResourceNotFoundException(coinDTO.getPriceId()));
+    public Coin update(Coin coinToUpdate, BigDecimal marketCap, BigDecimal price) {
+        Optional<Price> priceToUpdate = priceRepository.findByCoin(coinToUpdate);
+        if (priceToUpdate.isPresent()) {
+            priceToUpdate.get().setPrice(price);
+            priceService.update(priceToUpdate.get().getPriceId(), price);
+        }
+        coinToUpdate.setMarketCap(marketCap);
+        return coinRepository.save(coinToUpdate);
+    }
 
-                        coinToUpdate.setPrice(price);
-                    }
-                    return ResponseEntity.ok(coinRepository.save(coinToUpdate));
-                })
-                .orElseThrow(() -> new ResourceNotFoundException(id));
+    public Optional<Coin> findByNameAndSymbol(String name, String symbol) {
+        return coinRepository.findByNameAndSymbol(name, symbol);
     }
 
     public ResponseEntity<Coin> loadByName(String name) {
@@ -63,5 +49,10 @@ public class CoinService extends GenericService<Coin> {
             return ResponseEntity.ok(coin.get());
         }
         throw new ResourceNotFoundException("No coin found");
+    }
+
+    public BigDecimal getCoinPrice(Coin coin) {
+        Price price = coin.getPrice();
+        return price.getPrice();
     }
 }

@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Add alert</title>
+    <title>Add user coin</title>
 
     <!-- Custom fonts for this template-->
     <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -41,24 +41,19 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-4 text-gray-800">Add alert</h1>
+                    <h1 class="h3 mb-4 text-gray-800">Add coin</h1>
                     <div class="container mt-5">
-                        <h1 class="mb-4">Add alert</h1>
-                        <form action="/alert/add" method="post">
+<!--                        <h1 class="mb-4">Add Wallet</h1>-->
+                        <form action="/wallet/add-coin" method="post">
                             <div class="form-group">
-                                <label for="coin">Coin</label>
-                                <input type="text" class="form-control" id="coin" name="coin" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="target-price">Target price</label>
-                                <input type="number" class="form-control" id="target-price" name="target-price" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="status">Status</label>
-                                <select class="form-control" name="status" id="status" required>
-                                    <option value="true">On</option>
-                                    <option value="false">Off</option>
+                                <label for="coin-name">Coin name</label>
+                                <select class="form-control" name="coinName" id="coin-name" required>
+                                    <option th:each="coinName : ${coinNames}" th:value="${coinName}" th:text="${coinName}"></option>
                                 </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="amount">Amount</label>
+                                <input type="number" class="form-control" id="amount" name="amount" required>
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
