@@ -14,6 +14,7 @@ import pl.coderslab.cryptomanagement.exception.ResourceNotFoundException;
 import pl.coderslab.cryptomanagement.generic.GenericService;
 import pl.coderslab.cryptomanagement.repository.PortfolioRepository;
 import pl.coderslab.cryptomanagement.repository.UserRepository;
+import pl.coderslab.cryptomanagement.repository.WalletCoinRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -26,13 +27,15 @@ public class PortfolioService extends GenericService<Portfolio> {
     private final UserRepository userRepository;
     private final UserService userService;
     private final WalletService walletService;
+    private final WalletCoinRepository walletCoinRepository;
 
-    public PortfolioService(PortfolioRepository portfolioRepository, Validator validator, UserRepository userRepository, UserService userService, WalletService walletService) {
+    public PortfolioService(PortfolioRepository portfolioRepository, Validator validator, UserRepository userRepository, UserService userService, WalletService walletService, WalletCoinRepository walletCoinRepository) {
         super(portfolioRepository, validator);
         this.portfolioRepository = portfolioRepository;
         this.userRepository = userRepository;
         this.userService = userService;
         this.walletService = walletService;
+        this.walletCoinRepository = walletCoinRepository;
     }
 
     public ResponseEntity<Portfolio> update(Long id, PortfolioDTO portfolioDTO) {
@@ -89,6 +92,12 @@ public class PortfolioService extends GenericService<Portfolio> {
             return walletService.calculateTotalValue(wallets);
         }
         return BigDecimal.valueOf(0);
+    }
+
+    public int getTotalAssetsForUser(UserDetails userDetails) {
+        User user = userService.getUser(userDetails);
+        BigDecimal totalAssets = walletCoinRepository.findTotalAssetsByUserId(user.getUserId());
+        return totalAssets != null ? totalAssets.intValue() : 0;
     }
 
 }

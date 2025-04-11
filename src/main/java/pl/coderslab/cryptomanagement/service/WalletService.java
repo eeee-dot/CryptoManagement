@@ -11,6 +11,7 @@ import pl.coderslab.cryptomanagement.exception.ResourceNotFoundException;
 import pl.coderslab.cryptomanagement.generic.GenericService;
 import pl.coderslab.cryptomanagement.repository.CoinRepository;
 import pl.coderslab.cryptomanagement.repository.UserRepository;
+import pl.coderslab.cryptomanagement.repository.WalletCoinRepository;
 import pl.coderslab.cryptomanagement.repository.WalletRepository;
 
 import java.math.BigDecimal;
@@ -24,13 +25,17 @@ public class WalletService extends GenericService<Wallet> {
     private final UserRepository userRepository;
     private final CoinRepository coinRepository;
     private final CoinService coinService;
+    private final WalletCoinService walletCoinService;
+    private final WalletCoinRepository walletCoinRepository;
 
-    public WalletService(WalletRepository walletRepository, Validator validator, UserRepository userRepository, CoinRepository coinRepository, CoinService coinService) {
+    public WalletService(WalletRepository walletRepository, Validator validator, UserRepository userRepository, CoinRepository coinRepository, CoinService coinService, WalletCoinService walletCoinService, WalletCoinRepository walletCoinRepository) {
         super(walletRepository, validator);
         this.walletRepository = walletRepository;
         this.userRepository = userRepository;
         this.coinRepository = coinRepository;
         this.coinService = coinService;
+        this.walletCoinService = walletCoinService;
+        this.walletCoinRepository = walletCoinRepository;
     }
 
     public ResponseEntity<Wallet> update(Long id, WalletDTO walletDTO) {
