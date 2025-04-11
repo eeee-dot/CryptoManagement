@@ -12,6 +12,7 @@ import java.util.Optional;
 
 public interface WalletCoinRepository extends JpaRepository<WalletCoin, Long> {
     Optional<WalletCoin> findByWalletAndCoin(Wallet wallet, Coin coin);
+
     @Query("SELECT COUNT(DISTINCT wc.coin.id) FROM WalletCoin wc WHERE wc.wallet.user.id = :userId")
     BigDecimal findTotalAssetsByUserId(@Param("userId") Long userId);
 }

@@ -24,7 +24,6 @@ import java.util.Optional;
 @Service
 public class PortfolioService extends GenericService<Portfolio> {
     private final PortfolioRepository portfolioRepository;
-    private final UserRepository userRepository;
     private final UserService userService;
     private final WalletService walletService;
     private final WalletCoinRepository walletCoinRepository;
@@ -32,31 +31,16 @@ public class PortfolioService extends GenericService<Portfolio> {
     public PortfolioService(PortfolioRepository portfolioRepository, Validator validator, UserRepository userRepository, UserService userService, WalletService walletService, WalletCoinRepository walletCoinRepository) {
         super(portfolioRepository, validator);
         this.portfolioRepository = portfolioRepository;
-        this.userRepository = userRepository;
         this.userService = userService;
         this.walletService = walletService;
         this.walletCoinRepository = walletCoinRepository;
     }
 
-    public ResponseEntity<Portfolio> update(Long id, PortfolioDTO portfolioDTO) {
+    public ResponseEntity<Portfolio> update(Long id, BigDecimal totalValue) {
         return portfolioRepository.findById(id)
                 .map(portfolioToUpdate -> {
-                    if (portfolioDTO.getCreatedAt() != null) {
-                        portfolioToUpdate.setCreatedAt(portfolioDTO.getCreatedAt());
-                    }
-                    if (portfolioDTO.getTotalValue() != null) {
-                        portfolioToUpdate.setTotalValue(portfolioDTO.getTotalValue());
-                    }
-                    if (portfolioDTO.getUpdatedAt() != null) {
-                        portfolioToUpdate.setUpdatedAt(portfolioDTO.getUpdatedAt());
-                    }
-                    if (portfolioDTO.getUserId() != null) {
-                        User user = userRepository
-                                .findById(portfolioDTO.getUserId())
-                                .orElseThrow(() -> new ResourceNotFoundException(portfolioDTO.getUserId()));
+                        portfolioToUpdate.setTotalValue(totalValue);
 
-                        portfolioToUpdate.setUser(user);
-                    }
                     return ResponseEntity.ok(portfolioRepository.save(portfolioToUpdate));
                 })
                 .orElseThrow(() -> new ResourceNotFoundException(id));
@@ -75,6 +59,7 @@ public class PortfolioService extends GenericService<Portfolio> {
             BigDecimal totalValue = this.getTotalValue(user);
             Portfolio portfolio = optionalPortfolio.get();
             portfolio.setTotalValue(totalValue);
+            this.update(optionalPortfolio.get().getPortfolioId(), totalValue);
             return optionalPortfolio.get();
         } else {
             Portfolio portfolio = new Portfolio();
