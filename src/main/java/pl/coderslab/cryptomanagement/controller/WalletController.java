@@ -78,8 +78,7 @@ public class WalletController {
                                   @RequestParam BigDecimal amount,
                                   @SessionAttribute("walletId") Long walletId,
                                   SessionStatus sessionStatus) {
-        System.out.println("WalletController: " + walletId);
-        Wallet wallet = walletService.getById(Long.valueOf(walletId)).getBody();
+        Wallet wallet = walletService.getById(walletId).getBody();
 
         if (wallet == null) {
             return "404";

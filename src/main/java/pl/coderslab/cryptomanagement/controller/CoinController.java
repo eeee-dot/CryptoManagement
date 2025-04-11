@@ -86,7 +86,6 @@ public class CoinController extends GenericController<Coin> {
             model.addAttribute("coinNames", coinNames);
         }
 
-        System.out.println("Coin controller" + walletId);
         model.addAttribute("walletId", walletId);
         return "add-coin-form";
     }
