@@ -25,14 +25,10 @@ import java.util.Optional;
 @RequestMapping("/home")
 public class PortfolioController extends GenericController<Portfolio> {
     private final PortfolioService portfolioService;
-    private final UserService userService;
-    private final WalletService walletService;
 
     public PortfolioController(PortfolioService portfolioService, UserService userService, WalletService walletService) {
         super(portfolioService, Portfolio.class);
         this.portfolioService = portfolioService;
-        this.userService = userService;
-        this.walletService = walletService;
     }
 
     @GetMapping()
@@ -42,12 +38,4 @@ public class PortfolioController extends GenericController<Portfolio> {
 
         return "index";
     }
-
-    @PatchMapping("/portfolio")
-    public ResponseEntity<Portfolio> updatePortfolio() {
-        portfolioService.update(1L, new PortfolioDTO());
-        return ResponseEntity.ok().build();
-    }
-
-
 }
