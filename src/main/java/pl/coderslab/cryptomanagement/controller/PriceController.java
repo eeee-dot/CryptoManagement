@@ -19,11 +19,11 @@ public class PriceController extends GenericController<Price> {
         this.priceService = priceService;
     }
 
-    @PatchMapping("/price")
-    public ResponseEntity<Price> updatePrice() {
-        priceService.update(1L, new PriceDTO());
-        return ResponseEntity.ok().build();
-    }
+//    @PatchMapping("/price")
+//    public ResponseEntity<Price> updatePrice() {
+//        priceService.update(1L, new PriceDTO());
+//        return ResponseEntity.ok().build();
+//    }
 
 
 }

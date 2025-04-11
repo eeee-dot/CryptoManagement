@@ -1,14 +1,10 @@
 package pl.coderslab.cryptomanagement.service;
 
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import pl.coderslab.cryptomanagement.dto.WalletCoinDTO;
 import pl.coderslab.cryptomanagement.entity.Coin;
 import pl.coderslab.cryptomanagement.entity.Wallet;
 import pl.coderslab.cryptomanagement.entity.WalletCoin;
-import pl.coderslab.cryptomanagement.exception.ResourceNotFoundException;
-import pl.coderslab.cryptomanagement.repository.CoinRepository;
 import pl.coderslab.cryptomanagement.repository.WalletCoinRepository;
 
 import java.math.BigDecimal;

@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface CoinRepository extends JpaRepository<Coin, Long> {
     Optional<Coin> findByName(String name);
+
+    Optional<Coin> findByNameAndSymbol(String name, String symbol);
 }

@@ -28,7 +28,6 @@ public class Coin {
     @NotEmpty
     private String symbol;
 
-    @CreationTimestamp
     private LocalDateTime createdAt;
 
     @DecimalMin(value = "0.0", inclusive = false)
