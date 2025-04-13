@@ -11,6 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -35,4 +36,18 @@ public class Price {
     public String toString() {
         return price.toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Price price1 = (Price) o;
+        return Objects.equals(priceId, price1.priceId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(priceId);
+    }
+
 }

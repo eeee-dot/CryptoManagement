@@ -1,6 +1,8 @@
 package pl.coderslab.cryptomanagement;
 
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -19,12 +21,16 @@ import pl.coderslab.cryptomanagement.service.UserService;
 public class ApplicationSecurityConfig {
     private UserService userService;
 
+    private static final Logger logger = LoggerFactory.getLogger(ApplicationSecurityConfig.class);
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        logger.info("Configuring security filter chain");
+
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/fonts/**", "/img/**", "/js/**", "/css/**", "/scss/**", "/vendor/**", "/user/add").permitAll()
+                        .requestMatchers("/fonts/**", "/img/**", "/js/**", "/css/**", "/scss/**", "/vendor/**", "/user/add", "/highest-value/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin -> formLogin
