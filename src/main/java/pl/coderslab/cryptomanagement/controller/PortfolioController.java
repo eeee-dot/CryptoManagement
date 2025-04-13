@@ -34,8 +34,7 @@ public class PortfolioController extends GenericController<Portfolio> {
         this.portfolio = portfolioService.getPortfolio(userDetails);
         model.addAttribute("totalValue", portfolio.getTotalValue());
 
-        User user = userService.getUser(userDetails);
-        portfolioService.update(portfolio.getPortfolioId(), portfolioService.getPortfolioValue(user));
+        portfolioService.update(portfolio.getPortfolioId(), portfolio.getTotalValue());
 
         int assets = portfolioService.getTotalAssetsForUser(userDetails);
         model.addAttribute("assets", assets);

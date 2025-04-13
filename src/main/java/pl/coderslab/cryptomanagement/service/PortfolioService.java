@@ -31,8 +31,9 @@ public class PortfolioService extends GenericService<Portfolio> {
     private final WalletCoinRepository walletCoinRepository;
     private final PriceService priceService;
     private final PortfolioHistoryRepository portfolioHistoryRepository;
+    private final CoinService coinService;
 
-    public PortfolioService(PortfolioRepository portfolioRepository, Validator validator, UserRepository userRepository, UserService userService, WalletService walletService, WalletCoinRepository walletCoinRepository, PriceService priceService, PortfolioHistoryRepository portfolioHistoryRepository) {
+    public PortfolioService(PortfolioRepository portfolioRepository, Validator validator, UserRepository userRepository, UserService userService, WalletService walletService, WalletCoinRepository walletCoinRepository, PriceService priceService, PortfolioHistoryRepository portfolioHistoryRepository, CoinService coinService) {
         super(portfolioRepository, validator);
         this.portfolioRepository = portfolioRepository;
         this.userService = userService;
@@ -40,6 +41,7 @@ public class PortfolioService extends GenericService<Portfolio> {
         this.walletCoinRepository = walletCoinRepository;
         this.priceService = priceService;
         this.portfolioHistoryRepository = portfolioHistoryRepository;
+        this.coinService = coinService;
     }
 
     private void createPortfolioHistory(Portfolio portfolio) {
@@ -56,6 +58,8 @@ public class PortfolioService extends GenericService<Portfolio> {
             LocalDateTime lastUpdated = portfolioToUpdate.getUpdatedAt();
             if (lastUpdated == null || Duration.between(lastUpdated, LocalDateTime.now()).toHours() > 12) {
                 createPortfolioHistory(portfolioToUpdate);
+                coinService.reloadCoins();
+                portfolioToUpdate.setUpdatedAt(LocalDateTime.now());
             }
 
             portfolioToUpdate.setTotalValue(totalValue);
@@ -91,7 +95,6 @@ public class PortfolioService extends GenericService<Portfolio> {
 
     public BigDecimal getPortfolioValue(User user) {
         List<Wallet> wallets = walletService.loadWalletsByUser(user).getBody();
-        System.out.println(wallets);
         if (!wallets.isEmpty()) {
             return walletService.calculateTotalValue(wallets);
         }
