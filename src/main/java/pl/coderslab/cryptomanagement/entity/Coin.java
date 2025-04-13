@@ -12,6 +12,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -42,4 +43,17 @@ public class Coin {
 
    @OneToMany(mappedBy = "coin", cascade = CascadeType.ALL)
     private List<WalletCoin> walletCoins;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Coin coin = (Coin) o;
+        return Objects.equals(coinId, coin.coinId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(coinId);
+    }
 }

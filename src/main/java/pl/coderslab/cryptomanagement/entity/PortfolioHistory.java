@@ -1,5 +1,6 @@
 package pl.coderslab.cryptomanagement.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
@@ -9,37 +10,30 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Portfolio {
+public class PortfolioHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long portfolioId;
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "portfolio_id", nullable = false)
+    @JsonIgnore
+    private Portfolio portfolio;
 
     @NotNull
     @DecimalMin(value = "0.0")
-    private BigDecimal totalValue;
+    private BigDecimal value;
 
-    private LocalDate createdAt;
-    private LocalDateTime updatedAt;
-
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = false)
-    @ToString.Exclude
-    private User user;
-
-    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
-    private List<PortfolioHistory> history;
+    private LocalDateTime recordedAt;
 
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDate.now();
-        updatedAt = LocalDateTime.now();
+        recordedAt = LocalDateTime.now();
     }
 }

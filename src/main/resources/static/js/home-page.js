@@ -1,24 +1,23 @@
 function time() {
+
+    const lastUpdateString = document.getElementById('lastUpdate').value;
+    const lastUpdate = parseDateString(lastUpdateString);
     const now = new Date();
-    const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const difference = now - midnight;
+    const difference = now - lastUpdate;
+
     const hours = Math.floor(difference / (1000 * 60 * 60));
     const minutes = Math.floor(difference % (1000 * 60 * 60) / (1000 * 60));
-    let hourFormat;
-    let minuteFormat;
-    if (minutes < 10) {
-        minuteFormat = `0${minutes}`
-    } else {
-        minuteFormat= `${minutes}`;
-    }
-    if (hours < 10) {
-        hourFormat = `0${hours}`
-    } else {
-        hourFormat = `${hours}`
-    }
+    let hourFormat = hours < 10 ? `0${hours}` : `${hours}`;
+    let minuteFormat = minutes < 10 ? `0${minutes}` : `${minutes}`;
+
     let timeElapsed = `${hourFormat}h:${minuteFormat}m`;
 
     document.getElementById("clock").innerText = `${timeElapsed}`;
+}
+
+function parseDateString(dateString) {
+    const parts = dateString.split(/[-T:.]/);
+    return new Date(parts[0], parts[1] - 1, parts[2], parts[3], parts[4], parts[5]);
 }
 
 setInterval(time, 60000);

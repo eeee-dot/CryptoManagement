@@ -1,58 +1,54 @@
 package pl.coderslab.cryptomanagement.controller;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import pl.coderslab.cryptomanagement.dto.PortfolioDTO;
+import org.springframework.web.bind.annotation.ResponseBody;
 import pl.coderslab.cryptomanagement.entity.Portfolio;
-<<<<<<< Updated upstream
-import pl.coderslab.cryptomanagement.generic.GenericController;
-=======
 import pl.coderslab.cryptomanagement.entity.PortfolioHistory;
->>>>>>> Stashed changes
 import pl.coderslab.cryptomanagement.service.PortfolioService;
+import pl.coderslab.cryptomanagement.service.UserService;
+import pl.coderslab.cryptomanagement.service.WalletService;
 
-import javax.sound.sampled.Port;
-import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Controller
-<<<<<<< Updated upstream
-@RequestMapping("/home")
-public class PortfolioController extends GenericController<Portfolio> {
-=======
-public class PortfolioController {
->>>>>>> Stashed changes
+public class PortfolioController{
     private final PortfolioService portfolioService;
+    private Portfolio portfolio;
 
-<<<<<<< Updated upstream
-    public PortfolioController(PortfolioService portfolioService) {
-        super(portfolioService, Portfolio.class);
-=======
     public PortfolioController(PortfolioService portfolioService, UserService userService, WalletService walletService) {
->>>>>>> Stashed changes
         this.portfolioService = portfolioService;
     }
 
-    @GetMapping()
-    public String goHome(Model model){
-        Portfolio portfolio = new Portfolio();
-        BigDecimal totalValue = portfolio.getTotalValue();
-        if(totalValue== null) {
-            totalValue = BigDecimal.valueOf(0);
+    @GetMapping("/home")
+    public String goHome(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        this.portfolio = portfolioService.getPortfolio(userDetails);
+        model.addAttribute("totalValue", portfolio.getTotalValue());
+
+        portfolioService.update(portfolio.getPortfolioId(), portfolio.getTotalValue());
+
+        int assets = portfolioService.getTotalAssetsForUser(userDetails);
+        model.addAttribute("assets", assets);
+
+        LocalDateTime lastUpdate = portfolio.getUpdatedAt();
+        model.addAttribute("lastUpdate", lastUpdate.toString());
+
+        String highestValuedName = portfolioService.getHighestValueAssetForUser(userDetails);
+        if (highestValuedName != null) {
+            model.addAttribute("highestValue", highestValuedName);
+
         }
-        model.addAttribute("totalValue", totalValue);
         return "index";
     }
 
-    @PatchMapping("/portfolio")
-    public ResponseEntity<Portfolio> updatePortfolio() {
-        portfolioService.update(1L, new PortfolioDTO());
-        return ResponseEntity.ok().build();
+    @GetMapping("/latest")
+    @ResponseBody
+    public List<PortfolioHistory> getUserLatestPortfolios() {
+        return portfolioService.getLatestEntries(portfolio.getPortfolioId(), 7);
     }
-
 
 }

@@ -3,7 +3,6 @@ package pl.coderslab.cryptomanagement.service;
 import jakarta.validation.Validator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import pl.coderslab.cryptomanagement.dto.PriceDTO;
 import pl.coderslab.cryptomanagement.entity.Coin;
 import pl.coderslab.cryptomanagement.entity.Price;
 import pl.coderslab.cryptomanagement.exception.ResourceNotFoundException;
@@ -13,6 +12,7 @@ import pl.coderslab.cryptomanagement.repository.PriceRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class PriceService extends GenericService<Price> {
@@ -37,4 +37,7 @@ public class PriceService extends GenericService<Price> {
                 .orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
+    public Optional<Price> loadByCoin(Coin coin){
+        return priceRepository.findByCoin(coin);
+    }
 }

@@ -43,7 +43,7 @@ public class WalletController {
         model.addAttribute("wallets", wallets);
 
         if (wallets != null) {
-            List<BigDecimal> totalValues = walletService.calculateTotalValues(wallets);
+            List<BigDecimal> totalValues = walletService.calculateWalletsTotalValues(wallets);
             model.addAttribute("totalValues", totalValues);
         }
 
