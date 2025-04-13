@@ -10,7 +10,6 @@ import pl.coderslab.cryptomanagement.dto.UserDTO;
 import pl.coderslab.cryptomanagement.entity.Portfolio;
 import pl.coderslab.cryptomanagement.entity.User;
 import pl.coderslab.cryptomanagement.exception.UnmatchedPasswordsException;
-import pl.coderslab.cryptomanagement.generic.GenericController;
 import pl.coderslab.cryptomanagement.service.PortfolioService;
 import pl.coderslab.cryptomanagement.service.UserService;
 
@@ -19,13 +18,12 @@ import java.util.Objects;
 
 @Controller
 @RequestMapping("/user")
-public class UserController extends GenericController<User> {
+public class UserController {
     private final UserService userService;
     private final PortfolioService portfolioService;
     private PasswordEncoder passwordEncoder;
 
     public UserController(UserService userService, PasswordEncoder passwordEncoder, PortfolioService portfolioService) {
-        super(userService, User.class);
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.portfolioService = portfolioService;

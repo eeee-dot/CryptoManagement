@@ -9,19 +9,31 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.coderslab.cryptomanagement.dto.PortfolioDTO;
 import pl.coderslab.cryptomanagement.entity.Portfolio;
+<<<<<<< Updated upstream
 import pl.coderslab.cryptomanagement.generic.GenericController;
+=======
+import pl.coderslab.cryptomanagement.entity.PortfolioHistory;
+>>>>>>> Stashed changes
 import pl.coderslab.cryptomanagement.service.PortfolioService;
 
 import javax.sound.sampled.Port;
 import java.math.BigDecimal;
 
 @Controller
+<<<<<<< Updated upstream
 @RequestMapping("/home")
 public class PortfolioController extends GenericController<Portfolio> {
+=======
+public class PortfolioController {
+>>>>>>> Stashed changes
     private final PortfolioService portfolioService;
 
+<<<<<<< Updated upstream
     public PortfolioController(PortfolioService portfolioService) {
         super(portfolioService, Portfolio.class);
+=======
+    public PortfolioController(PortfolioService portfolioService, UserService userService, WalletService walletService) {
+>>>>>>> Stashed changes
         this.portfolioService = portfolioService;
     }
 

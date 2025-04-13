@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import pl.coderslab.cryptomanagement.api.CoinMarketCapAPI;
 import pl.coderslab.cryptomanagement.entity.Coin;
+<<<<<<< Updated upstream
 import pl.coderslab.cryptomanagement.entity.Price;
 import pl.coderslab.cryptomanagement.entity.WalletCoin;
 import pl.coderslab.cryptomanagement.generic.GenericController;
@@ -19,6 +20,9 @@ import pl.coderslab.cryptomanagement.service.CoinService;
 import pl.coderslab.cryptomanagement.service.PriceService;
 import pl.coderslab.cryptomanagement.service.UserService;
 import pl.coderslab.cryptomanagement.service.WalletService;
+=======
+import pl.coderslab.cryptomanagement.service.*;
+>>>>>>> Stashed changes
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -30,14 +34,18 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/coin")
 @SessionAttributes("walletId")
-public class CoinController extends GenericController<Coin> {
+public class CoinController {
     private final CoinService coinService;
     private final PriceService priceService;
     private final WalletService walletService;
     private final UserService userService;
 
+<<<<<<< Updated upstream
     public CoinController(CoinService coinService, PriceService priceService, WalletService walletService, UserService userService) {
         super(coinService, Coin.class);
+=======
+    public CoinController(CoinService coinService) {
+>>>>>>> Stashed changes
         this.coinService = coinService;
         this.priceService = priceService;
         this.walletService = walletService;
