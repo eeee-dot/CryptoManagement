@@ -6,20 +6,21 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import pl.coderslab.cryptomanagement.dto.PortfolioDTO;
 import pl.coderslab.cryptomanagement.entity.*;
 import pl.coderslab.cryptomanagement.exception.ResourceNotFoundException;
 import pl.coderslab.cryptomanagement.generic.GenericService;
+import pl.coderslab.cryptomanagement.repository.PortfolioHistoryRepository;
 import pl.coderslab.cryptomanagement.repository.PortfolioRepository;
 import pl.coderslab.cryptomanagement.repository.UserRepository;
 import pl.coderslab.cryptomanagement.repository.WalletCoinRepository;
 
 import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -29,18 +30,34 @@ public class PortfolioService extends GenericService<Portfolio> {
     private final WalletService walletService;
     private final WalletCoinRepository walletCoinRepository;
     private final PriceService priceService;
+    private final PortfolioHistoryRepository portfolioHistoryRepository;
 
-    public PortfolioService(PortfolioRepository portfolioRepository, Validator validator, UserRepository userRepository, UserService userService, WalletService walletService, WalletCoinRepository walletCoinRepository, PriceService priceService) {
+    public PortfolioService(PortfolioRepository portfolioRepository, Validator validator, UserRepository userRepository, UserService userService, WalletService walletService, WalletCoinRepository walletCoinRepository, PriceService priceService, PortfolioHistoryRepository portfolioHistoryRepository) {
         super(portfolioRepository, validator);
         this.portfolioRepository = portfolioRepository;
         this.userService = userService;
         this.walletService = walletService;
         this.walletCoinRepository = walletCoinRepository;
         this.priceService = priceService;
+        this.portfolioHistoryRepository = portfolioHistoryRepository;
+    }
+
+    private void createPortfolioHistory(Portfolio portfolio) {
+        PortfolioHistory portfolioHistory = new PortfolioHistory();
+        portfolioHistory.setPortfolio(portfolio);
+        portfolioHistory.setValue(portfolio.getTotalValue());
+        portfolioHistory.setRecordedAt(LocalDateTime.now());
+        portfolioHistoryRepository.save(portfolioHistory);
     }
 
     public ResponseEntity<Portfolio> update(Long id, BigDecimal totalValue) {
         return portfolioRepository.findById(id).map(portfolioToUpdate -> {
+
+            LocalDateTime lastUpdated = portfolioToUpdate.getUpdatedAt();
+            if (lastUpdated == null || Duration.between(lastUpdated, LocalDateTime.now()).toHours() > 12) {
+                createPortfolioHistory(portfolioToUpdate);
+            }
+
             portfolioToUpdate.setTotalValue(totalValue);
 
             return ResponseEntity.ok(portfolioRepository.save(portfolioToUpdate));
@@ -57,7 +74,7 @@ public class PortfolioService extends GenericService<Portfolio> {
         User user = userService.getUser(userDetails);
         Optional<Portfolio> optionalPortfolio = this.getPortfolioByUserId(user.getUserId());
         if (optionalPortfolio.isPresent()) {
-            BigDecimal totalValue = this.getTotalValue(user);
+            BigDecimal totalValue = this.getPortfolioValue(user);
             Portfolio portfolio = optionalPortfolio.get();
             portfolio.setTotalValue(totalValue);
             this.update(optionalPortfolio.get().getPortfolioId(), totalValue);
@@ -72,9 +89,10 @@ public class PortfolioService extends GenericService<Portfolio> {
         }
     }
 
-    public BigDecimal getTotalValue(User user) {
+    public BigDecimal getPortfolioValue(User user) {
         List<Wallet> wallets = walletService.loadWalletsByUser(user).getBody();
-        if (wallets != null) {
+        System.out.println(wallets);
+        if (!wallets.isEmpty()) {
             return walletService.calculateTotalValue(wallets);
         }
         return BigDecimal.valueOf(0);
@@ -119,6 +137,12 @@ public class PortfolioService extends GenericService<Portfolio> {
             return highestValuedCoin.getName();
         }
         return null;
+    }
+
+    public List<PortfolioHistory> getLatestEntries(Long portfolioId, int days) {
+        Pageable pageable = PageRequest.of(0, days);
+        List<PortfolioHistory> allEntries = portfolioHistoryRepository.findTop7ByPortfolioOrderByRecordedAtDesc(portfolioId, pageable);
+        return allEntries.subList(0, Math.min(days, allEntries.size()));
     }
 
 }

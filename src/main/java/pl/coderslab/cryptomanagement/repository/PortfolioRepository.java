@@ -8,5 +8,5 @@ import pl.coderslab.cryptomanagement.entity.Portfolio;;import java.util.List;
 
 public interface PortfolioRepository extends JpaRepository<Portfolio, Long> {
     @Query("SELECT p FROM Portfolio p WHERE p.user.id = :userId ORDER BY p.createdAt DESC")
-    List<Portfolio> findPortfolioByUserId(@Param("userId") Long userId, Pageable pagable);
+    List<Portfolio> findPortfolioByUserId(@Param("userId") Long userId, Pageable pageable);
 }

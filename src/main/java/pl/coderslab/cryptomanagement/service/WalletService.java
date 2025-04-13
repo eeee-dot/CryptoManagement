@@ -23,19 +23,13 @@ import java.util.stream.Collectors;
 public class WalletService extends GenericService<Wallet> {
     private final WalletRepository walletRepository;
     private final UserRepository userRepository;
-    private final CoinRepository coinRepository;
     private final CoinService coinService;
-    private final WalletCoinService walletCoinService;
-    private final WalletCoinRepository walletCoinRepository;
 
-    public WalletService(WalletRepository walletRepository, Validator validator, UserRepository userRepository, CoinRepository coinRepository, CoinService coinService, WalletCoinService walletCoinService, WalletCoinRepository walletCoinRepository) {
+    public WalletService(WalletRepository walletRepository, Validator validator, UserRepository userRepository, CoinService coinService) {
         super(walletRepository, validator);
         this.walletRepository = walletRepository;
         this.userRepository = userRepository;
-        this.coinRepository = coinRepository;
         this.coinService = coinService;
-        this.walletCoinService = walletCoinService;
-        this.walletCoinRepository = walletCoinRepository;
     }
 
     public ResponseEntity<Wallet> update(Long id, WalletDTO walletDTO) {
@@ -54,19 +48,6 @@ public class WalletService extends GenericService<Wallet> {
 
                         walletToUpdate.setUser(user);
                     }
-//                    if(walletDTO.getCoins() != null) {
-//                        for(WalletCoinDTO coinDTO : walletDTO.getCoins()) {
-//                            Coin coin = coinRepository.findById(coinDTO.getCoin())
-//                                    .orElseThrow(() -> new ResourceNotFoundException(coinDTO.getCoin()));
-//
-//                            for (WalletCoin walletCoin : walletToUpdate.getWalletCoins()) {
-//                                if(walletCoin.getCoin().equals(coin)) {
-//                                    walletCoin.setAmount(walletCoin.getAmount().add(coinDTO.getAmount()));
-//                                    walletToUpdate.getWalletCoins().add(walletCoin);
-//                                }
-//                            }
-//                        }
-//                    }
 
                     return ResponseEntity.ok(walletRepository.save(walletToUpdate));
                 })
