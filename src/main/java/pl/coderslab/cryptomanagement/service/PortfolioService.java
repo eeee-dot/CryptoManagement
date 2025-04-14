@@ -63,7 +63,11 @@ public class PortfolioService extends GenericService<Portfolio> {
             }
 
             portfolioToUpdate.setTotalValue(totalValue);
-
+            Pageable pageable = PageRequest.of(0, 1);
+            List<PortfolioHistory> portfolioHistories = portfolioHistoryRepository.findTopByPortfolioOrderByRecordedAtDesc(portfolioToUpdate.getPortfolioId(), pageable);
+            PortfolioHistory latest = portfolioHistories.get(0);
+            latest.setValue(totalValue);
+            portfolioHistoryRepository.save(latest);
             return ResponseEntity.ok(portfolioRepository.save(portfolioToUpdate));
         }).orElseThrow(() -> new ResourceNotFoundException(id));
     }
@@ -144,7 +148,7 @@ public class PortfolioService extends GenericService<Portfolio> {
 
     public List<PortfolioHistory> getLatestEntries(Long portfolioId, int days) {
         Pageable pageable = PageRequest.of(0, days);
-        List<PortfolioHistory> allEntries = portfolioHistoryRepository.findTop7ByPortfolioOrderByRecordedAtDesc(portfolioId, pageable);
+        List<PortfolioHistory> allEntries = portfolioHistoryRepository.findTopByPortfolioOrderByRecordedAtDesc(portfolioId, pageable);
         return allEntries.subList(0, Math.min(days, allEntries.size()));
     }
 

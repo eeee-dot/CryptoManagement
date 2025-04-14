@@ -10,5 +10,5 @@ import java.util.List;
 
 public interface PortfolioHistoryRepository extends JpaRepository<PortfolioHistory, Long> {
     @Query("SELECT ph FROM PortfolioHistory ph WHERE ph.portfolio.id = :portfolioId ORDER BY ph.recordedAt DESC")
-    List<PortfolioHistory> findTop7ByPortfolioOrderByRecordedAtDesc(@Param("portfolioId") Long portfolioId, Pageable pageable);
+    List<PortfolioHistory> findTopByPortfolioOrderByRecordedAtDesc(@Param("portfolioId") Long portfolioId, Pageable pageable);
 }

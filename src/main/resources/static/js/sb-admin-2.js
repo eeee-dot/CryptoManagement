@@ -22,7 +22,7 @@
             let id = element.getAttribute("data-id");
 
             let xhr = new XMLHttpRequest();
-            xhr.open("DELETE", "/wallet/delete-coin/" + id, true);
+            xhr.open("DELETE", "/wallet/delete/" + id, true);
 
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200) {
