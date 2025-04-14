@@ -5,10 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
-import pl.coderslab.cryptomanagement.entity.Coin;
-import pl.coderslab.cryptomanagement.entity.User;
-import pl.coderslab.cryptomanagement.entity.Wallet;
-import pl.coderslab.cryptomanagement.entity.WalletCoin;
+import pl.coderslab.cryptomanagement.entity.*;
 import pl.coderslab.cryptomanagement.service.CoinService;
 import pl.coderslab.cryptomanagement.service.UserService;
 import pl.coderslab.cryptomanagement.service.WalletService;
@@ -16,6 +13,7 @@ import pl.coderslab.cryptomanagement.service.WalletCoinService;
 import org.springframework.ui.Model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +25,7 @@ public class WalletController {
     private final UserService userService;
     private final CoinService coinService;
     private final WalletCoinService walletCoinService;
+    private User user;
 
     public WalletController(WalletService walletService, UserService userService, CoinService coinService, WalletCoinService walletCoinService) {
         this.walletService = walletService;
@@ -37,7 +36,7 @@ public class WalletController {
 
     @GetMapping()
     public String getWallets(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        User user = userService.getUser(userDetails);
+        this.user = userService.getUser(userDetails);
 
         List<Wallet> wallets = walletService.loadWalletsByUser(user).getBody();
         model.addAttribute("wallets", wallets);
@@ -59,16 +58,14 @@ public class WalletController {
     @PostMapping("/add")
     public String addWallet(
             @RequestParam("name") String name,
-            @RequestParam("address") String address,
-            @AuthenticationPrincipal UserDetails userDetails
+            @RequestParam("address") String address
     ) {
-        User user = userService.getUser(userDetails);
 
         Wallet wallet = new Wallet();
         wallet.setName(name);
         wallet.setAddress(address);
         wallet.setBalance(BigDecimal.valueOf(0));
-        wallet.setUser(user);
+        wallet.setUser(this.user);
 
         walletService.add(wallet);
 
@@ -79,6 +76,27 @@ public class WalletController {
     public String deleteWallet(@PathVariable Long id) {
         walletService.delete(id);
         return "wallets";
+    }
+
+    @GetMapping("/show")
+    public String showWallet(@RequestParam("walletId") Long id, Model model) {
+        model.addAttribute("title", "Wallet - " + id);
+        model.addAttribute("walletId", id);
+
+        Wallet wallet = walletService.getById(id).getBody();
+        List<BigDecimal> values = new ArrayList<>();
+        if (wallet != null) {
+            List<WalletCoin> walletCoins = wallet.getWalletCoins();
+            for(WalletCoin walletCoin : walletCoins) {
+                Coin coin = walletCoin.getCoin();
+                Price price = coin.getPrice();
+                values.add(price.getPrice().multiply(walletCoin.getAmount()));
+
+            }
+            model.addAttribute("walletCoins", walletCoins);
+            model.addAttribute("values", values);
+        }
+        return "wallet";
     }
 
     @PostMapping("/add-coin")

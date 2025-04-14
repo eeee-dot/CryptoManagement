@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Wallets</title>
+    <title th:text="${title}"></title>
 
     <!-- Custom fonts for this template -->
     <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -45,9 +45,9 @@
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h4 class="m-0 font-weight-bold">User wallets</h4>
-                            <a class="btn btn-primary btn-sm" href="/wallet/add">
-                                Add new wallet
+                            <h4 class="m-0 font-weight-bold" th:text="${title}"></h4>
+                            <a class="btn btn-primary btn-sm" th:href="@{/coin/add(walletId=${walletId})}">
+                                Add new coin
                             </a>
                         </div>
                     </div>
@@ -57,22 +57,20 @@
                                 <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Balance [$]</th>
-                                    <th>Address</th>
-                                    <th>Actions</th>
+                                    <th>Symbol</th>
+                                    <th>Amount</th>
+                                    <th>Price</th>
+                                    <th>Value</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="wallet, iterStat : ${wallets}">
-                                    <td><a th:href="@{/wallet/show(walletId=${wallet.getWalletId()})}" th:text="${wallet.getName()}"></a></td>
-                                    <td th:text="${totalValues[iterStat.index]}"></td>
-                                    <td th:text="${wallet.getAddress()}"></td>
-                                    <td>
-                                        <ul>
-                                            <li><a th:href="@{/coin/add(walletId=${wallet.getWalletId()})}">Add coin</a></li>
-                                            <li><a class="deleteButton" href="#" th:attr="data-id=${wallet.getWalletId()}">Delete</a></li>
-                                        </ul>
-                                    </td>
+                                <tr th:each="walletCoin, iterStat : ${walletCoins}">
+                                    <td th:text="${walletCoin.getCoin().getName()}"></td>
+                                    <td th:text="${walletCoin.getCoin().getSymbol()}"></td>
+                                    <td th:text="${walletCoin.getAmount()}"></td>
+                                    <td th:text="${walletCoin.getCoin().getPrice().getPrice()}"></td>
+                                    <td th:text="${values[iterStat.index]}"></td>
+
                                 </tr>
                                 </tbody>
                             </table>
