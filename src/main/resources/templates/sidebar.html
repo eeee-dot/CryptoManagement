@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sidebar</title>
+</head>
+<body>
+<div th:fragment="sidebar">
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/home">
+            <div class="sidebar-brand-icon">
+                <img src="/img/ethereum-crypto.svg" alt="e">
+            </div>
+            <div class="mx-3">Crypto<sup>MGMT</sup></div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            Overview
+        </div>
+
+        <li class="nav-item">
+            <a class="nav-link" href="/home">
+                <i class="fas fa-fw fa-compass"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/coin">
+                <i class="fas fa-fw fa-dot-circle"></i>
+                <span>Coins</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/wallet">
+                <i class="fas fa-fw fa-table"></i>
+                <span>Wallets</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/alert">
+                <i class="fas fa-fw fa-bell"></i>
+                <span>Alerts</span>
+            </a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+    </ul>
+    <!-- End of Sidebar -->
+</div>
+</body>
+</html>
