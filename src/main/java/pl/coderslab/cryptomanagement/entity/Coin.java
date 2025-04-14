@@ -39,9 +39,11 @@ public class Coin {
     private Price price;
 
     @ManyToMany(mappedBy = "coins")
+    @ToString.Exclude
     private List<User> users;
 
    @OneToMany(mappedBy = "coin", cascade = CascadeType.ALL)
+   @ToString.Exclude
     private List<WalletCoin> walletCoins;
 
     @Override

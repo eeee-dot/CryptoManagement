@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
+import pl.coderslab.cryptomanagement.dto.WalletDTO;
 import pl.coderslab.cryptomanagement.entity.*;
 import pl.coderslab.cryptomanagement.service.CoinService;
 import pl.coderslab.cryptomanagement.service.UserService;
@@ -87,7 +88,7 @@ public class WalletController {
         List<BigDecimal> values = new ArrayList<>();
         if (wallet != null) {
             List<WalletCoin> walletCoins = wallet.getWalletCoins();
-            for(WalletCoin walletCoin : walletCoins) {
+            for (WalletCoin walletCoin : walletCoins) {
                 Coin coin = walletCoin.getCoin();
                 Price price = coin.getPrice();
                 values.add(price.getPrice().multiply(walletCoin.getAmount()));
@@ -133,4 +134,32 @@ public class WalletController {
         sessionStatus.setComplete();
         return "redirect:/wallet";
     }
+
+    @DeleteMapping("/delete-coin")
+    public String removeCoinFromWallet(@RequestParam("coinId") Long coinId,
+                                       @RequestParam("walletId") Long walletId) {
+        Wallet wallet = walletService.getById(walletId).getBody();
+        if (wallet == null) {
+            return "404";
+        }
+
+        Coin coin = coinService.getById(coinId).getBody();
+        if (coin == null) {
+            return "404";
+        }
+        Optional<WalletCoin> optionalWalletCoins = wallet.getWalletCoins().stream().filter(walletCoin ->
+                walletCoin.getCoin().equals(coin)).findFirst();
+        if (optionalWalletCoins.isPresent()) {
+            WalletCoin walletCoin = optionalWalletCoins.get();
+            WalletDTO walletDTO = new WalletDTO();
+
+            walletDTO.setWalletCoins(wallet.getWalletCoins());
+            walletDTO.getWalletCoins().remove(walletCoin);
+
+            walletService.update(walletId, walletDTO);
+        }
+        return "/wallet";
+    }
+
+
 }

@@ -37,7 +37,7 @@ public class Wallet {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<WalletCoin> walletCoins;
 }

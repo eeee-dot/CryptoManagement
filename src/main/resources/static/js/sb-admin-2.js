@@ -2,10 +2,28 @@
     "use strict"; // Start of use strict
 
     document.addEventListener("DOMContentLoaded", function() {
+        function deleteWalletCoin(element) {
+            let walletId = element.getAttribute("data-wallet-id");
+            let coinId = element.getAttribute("data-coin-id");
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("DELETE", `/wallet/delete-coin?walletId=${walletId}&coinId=${coinId}`, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    alert("Coin was successfully deleted from wallet");
+                    window.location.href = `/wallet/show?walletId=${walletId}`;
+                } else if (xhr.readyState === 4) {
+                    alert("Error deleting coin from wallet: " + xhr.responseText);
+                }
+            };
+            xhr.send(null);
+        }
         function deleteWallet(element) {
             let id = element.getAttribute("data-id");
+
             let xhr = new XMLHttpRequest();
-            xhr.open("DELETE", "/wallet/delete/" + id, true);
+            xhr.open("DELETE", "/wallet/delete-coin/" + id, true);
+
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     alert("Wallet was successfully deleted");
@@ -31,6 +49,13 @@
             };
             xhr.send(null);
         }
+
+        document.querySelectorAll(".deleteWalletCoin").forEach(function (element) {
+            element.addEventListener("click", function (event) {
+                event.preventDefault();
+                deleteWalletCoin(this);
+            });
+        });
 
         document.querySelectorAll(".deleteButton").forEach(function (element) {
             element.addEventListener("click", function (event) {

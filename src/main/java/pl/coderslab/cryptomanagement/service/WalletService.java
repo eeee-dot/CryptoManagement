@@ -32,23 +32,16 @@ public class WalletService extends GenericService<Wallet> {
         this.coinService = coinService;
     }
 
-    public ResponseEntity<Wallet> update(Long id, WalletDTO walletDTO) {
+    public ResponseEntity<Wallet> update(Long id, WalletDTO walletUpdateDTO) {
         return walletRepository.findById(id)
                 .map(walletToUpdate -> {
-                    if (walletDTO.getName() != null) {
-                        walletToUpdate.setName(walletDTO.getName());
+                    if (walletUpdateDTO.getBalance() != null) {
+                        walletToUpdate.setBalance(walletUpdateDTO.getBalance());
                     }
-                    if (walletDTO.getBalance() != null) {
-                        walletToUpdate.setBalance(walletDTO.getBalance());
+                    if (walletUpdateDTO.getWalletCoins() != null) {
+                        walletToUpdate.setWalletCoins(walletUpdateDTO.getWalletCoins());
                     }
-                    if (walletDTO.getUserId() != null) {
-                        User user = userRepository
-                                .findById(walletDTO.getUserId())
-                                .orElseThrow(() -> new ResourceNotFoundException(walletDTO.getUserId()));
-
-                        walletToUpdate.setUser(user);
-                    }
-
+                    System.out.println(walletToUpdate.getWalletCoins());
                     return ResponseEntity.ok(walletRepository.save(walletToUpdate));
                 })
                 .orElseThrow(() -> new ResourceNotFoundException(id));
