@@ -65,7 +65,6 @@ public class WalletController {
         Wallet wallet = new Wallet();
         wallet.setName(name);
         wallet.setAddress(address);
-        wallet.setBalance(BigDecimal.valueOf(0));
         wallet.setUser(this.user);
 
         walletService.add(wallet);

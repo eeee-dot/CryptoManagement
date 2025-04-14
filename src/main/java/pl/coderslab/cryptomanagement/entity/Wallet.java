@@ -27,9 +27,6 @@ public class Wallet {
     @CreationTimestamp
     private LocalDate createdAt;
 
-    @DecimalMin(value = "0.0")
-    private BigDecimal balance;
-
     @NotEmpty
     private String address;
 

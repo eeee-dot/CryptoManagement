@@ -35,9 +35,6 @@ public class WalletService extends GenericService<Wallet> {
     public ResponseEntity<Wallet> update(Long id, WalletDTO walletUpdateDTO) {
         return walletRepository.findById(id)
                 .map(walletToUpdate -> {
-                    if (walletUpdateDTO.getBalance() != null) {
-                        walletToUpdate.setBalance(walletUpdateDTO.getBalance());
-                    }
                     if (walletUpdateDTO.getWalletCoins() != null) {
                         walletToUpdate.setWalletCoins(walletUpdateDTO.getWalletCoins());
                     }
