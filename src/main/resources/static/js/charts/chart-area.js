@@ -45,8 +45,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 return response.json();
             })
             .then(portfoliosHistory => {
-                const labels = portfoliosHistory.map(p => parseDateDays(p.recordedAt));
-                const data = portfoliosHistory.map(p => p.value);
+                const labels = portfoliosHistory.map(p => parseDateDays(p.recordedAt)).reverse();
+                const data = portfoliosHistory.map(p => p.value).reverse();
 
                 // Update the chart
                 var ctx = document.getElementById("myAreaChart").getContext('2d');

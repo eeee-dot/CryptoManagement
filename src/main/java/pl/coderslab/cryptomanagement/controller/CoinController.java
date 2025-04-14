@@ -21,7 +21,6 @@ public class CoinController {
 
     public CoinController(CoinService coinService) {
         this.coinService = coinService;
-
     }
 
     @GetMapping()
