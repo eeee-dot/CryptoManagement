@@ -11,10 +11,6 @@ public class UnmatchedPasswordsException extends RuntimeException {
         this.errorCode = errorCode;
     }
 
-    public UnmatchedPasswordsException(String message) {
-        super(message);
-    }
-
     public UnmatchedPasswordsException() {
         super("Passwords didn't match");
     }

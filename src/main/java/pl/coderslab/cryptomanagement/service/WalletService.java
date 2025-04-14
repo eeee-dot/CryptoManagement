@@ -1,4 +1,3 @@
-// START GENAI
 package pl.coderslab.cryptomanagement.service;
 
 import jakarta.validation.Validator;

@@ -27,7 +27,7 @@ public class PriceService extends GenericService<Price> {
     public ResponseEntity<Price> update(Long id, BigDecimal price) {
         return priceRepository.findById(id)
                 .map(priceToUpdate -> {
-                        priceToUpdate.setPrice(price);
+                    priceToUpdate.setPrice(price);
 
                     LocalDateTime current = LocalDateTime.now();
                     priceToUpdate.setDate(current);
@@ -37,7 +37,7 @@ public class PriceService extends GenericService<Price> {
                 .orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
-    public Optional<Price> loadByCoin(Coin coin){
+    public Optional<Price> loadByCoin(Coin coin) {
         return priceRepository.findByCoin(coin);
     }
 }

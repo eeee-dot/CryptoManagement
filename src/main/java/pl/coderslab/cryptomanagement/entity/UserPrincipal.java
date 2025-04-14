@@ -1,7 +1,6 @@
 package pl.coderslab.cryptomanagement.entity;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -16,7 +15,6 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Return the authorities for the user (e.g., roles)
         return Collections.emptyList();
     }
 

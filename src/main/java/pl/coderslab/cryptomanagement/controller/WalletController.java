@@ -5,7 +5,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
-import pl.coderslab.cryptomanagement.dto.WalletDTO;
 import pl.coderslab.cryptomanagement.entity.*;
 import pl.coderslab.cryptomanagement.service.UserService;
 import pl.coderslab.cryptomanagement.service.WalletService;

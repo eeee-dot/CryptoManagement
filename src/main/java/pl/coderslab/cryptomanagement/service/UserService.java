@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import pl.coderslab.cryptomanagement.dto.UserDTO;
-import pl.coderslab.cryptomanagement.entity.Coin;
 import pl.coderslab.cryptomanagement.entity.User;
 import pl.coderslab.cryptomanagement.entity.UserPrincipal;
 import pl.coderslab.cryptomanagement.exception.ResourceNotFoundException;
@@ -19,12 +18,12 @@ import java.util.Optional;
 @Service
 public class UserService extends GenericService<User> implements UserDetailsService {
     private final UserRepository userRepository;
-    
-    public UserService (UserRepository userRepository, Validator validator) {
+
+    public UserService(UserRepository userRepository, Validator validator) {
         super(userRepository, validator);
         this.userRepository = userRepository;
     }
-    
+
     public ResponseEntity<User> update(Long id, UserDTO userDTO) {
         return userRepository.findById(id)
                 .map(userToUpdate -> {
