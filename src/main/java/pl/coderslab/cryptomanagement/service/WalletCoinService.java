@@ -28,4 +28,8 @@ public class WalletCoinService {
     public Optional<WalletCoin> findByWalletAndCoin(Wallet wallet, Coin coin) {
         return walletCoinRepository.findByWalletAndCoin(wallet, coin);
     }
+
+    public void delete(Long id) {
+        walletCoinRepository.deleteById(id);
+    }
 }

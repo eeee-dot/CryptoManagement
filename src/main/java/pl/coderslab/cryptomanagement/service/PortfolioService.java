@@ -99,7 +99,7 @@ public class PortfolioService extends GenericService<Portfolio> {
     }
 
     public BigDecimal getPortfolioValue(User user) {
-        List<Wallet> wallets = walletService.loadWalletsByUser(user).getBody();
+        List<Wallet> wallets = walletService.loadWalletsByUser(user);
         return wallets != null && !wallets.isEmpty() ? walletService.calculateTotalValue(wallets) : BigDecimal.valueOf(0);
     }
 
@@ -111,7 +111,7 @@ public class PortfolioService extends GenericService<Portfolio> {
 
     public String getHighestValueAssetForUser(UserDetails userDetails) {
         User user = userService.getUser(userDetails);
-        List<Wallet> wallets = walletService.loadWalletsByUser(user).getBody();
+        List<Wallet> wallets = walletService.loadWalletsByUser(user);
         if (wallets == null) return null;
 
         Map<Coin, BigDecimal> coinTotalValue = calculateCoinTotalValue(wallets);

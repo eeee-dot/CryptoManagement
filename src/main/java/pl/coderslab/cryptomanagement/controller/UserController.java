@@ -45,6 +45,7 @@ public class UserController {
         if (!Objects.equals(password, repeatedPassword)) {
             throw new UnmatchedPasswordsException();
         }
+
         User newUser = new User();
         newUser.setUsername(username);
         newUser.setEmail(email);
