@@ -72,7 +72,7 @@
                                     <td th:text="${walletCoin.getCoin().getPrice().getPrice()}"></td>
                                     <td th:text="${values[iterStat.index]}"></td>
                                     <td>
-                                        <button class="deleteWallet btn btn-danger"
+                                        <button class="deleteWalletCoin btn btn-danger"
                                                 th:attr="data-coin-id=${walletCoin.getCoin().getCoinId()}, data-wallet-id=${walletId}">
                                             <i class="fa fa-trash fa-lg"></i> Remove
                                         </button>
