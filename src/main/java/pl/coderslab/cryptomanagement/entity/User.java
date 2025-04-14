@@ -36,11 +36,4 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Alert> alerts;
-
-    @ManyToMany
-    @JoinTable(
-            name = "user_coins",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "coin_id"))
-    private List<Coin> coins;
 }
