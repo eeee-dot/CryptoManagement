@@ -9,8 +9,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 
 public class CoinMarketCapAPI {
-    private static final String API_KEY = "22bd0777-a2c3-41c0-abe0-fa97683c4db4";
-    private static final String API_URL = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest";
+    private static final String API_KEY = ApiSettings.API_KEY;
+    private static final String API_URL = ApiSettings.API_URL;
 
     public static JSONObject getAPIResponse() {
         try {
